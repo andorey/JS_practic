@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>snake</title>
+	<style>
+        #game {
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            table-layout: fixed;
+        }
+
+        #game > div {
+            display: flex;
+        }
+
+        #game > div > span {
+            width: 10px;
+            height: 10px;
+            border: 1px solid #edecec;
+        }
+		
+		.active{
+			background-color: coral;
+		}
+	</style>
+</head>
+<body>
+<div id="game"></div>
+
+<script>
+    const game = document.getElementById('game');
+    let columnNum = Math.floor(window.innerWidth / 12);
+    let rowsNum = Math.floor(window.innerHeight / 13);
+    let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
+    
+    lineCheck.map((el, i) =>{
+        let div = document.createElement('div');
+        el.map((item, k) =>{
+            let span = document.createElement('span')
+			span.setAttribute('posx', k)
+			span.setAttribute('posy', i)
+            span.setAttribute('value', item)
+            span.addEventListener('click', function (event){
+                this.classList.add('active')
+                this.setAttribute('value', 1)
+				console.log(this.attributes['posx'], this.attributes['value'], event);
+			})
+            div.appendChild(span)
+		});
+        game.appendChild(div)
+	})
+
+	const forward = (arr, start, end) => [arr[(start + 1) % arr.length], arr[end]] = [1, 0];
+	
+	function steps(arr, start, end) {
+	    arr = arr.map((el, i)=> i <= start && i >= end ? 1 : 0)
+        for (let i = 0; i < 3000; i++) {
+            let allField = document.querySelectorAll('span');
+            allField.forEach(function (el){
+                if (el.attributes['value'] === '1'){
+                    el.classList.add('active')
+                }else{
+                    el.classList.remove('active')
+                }
+            })
+			forward(arr, start, end)
+        }
+    }
+
+</script>
+</body>
+</html>
