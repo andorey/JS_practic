@@ -21,9 +21,15 @@
             border: 1px solid #edecec;
         }
 		
-		.active{
+		.sakeeHead{
 			background-color: coral;
 		}
+		
+		.snakeBody{
+			background-color: cornflowerblue;
+			border-radius: 50%;
+		}
+		
 	</style>
 </head>
 <body>
@@ -37,38 +43,27 @@
     
     lineCheck.map((el, i) =>{
         let div = document.createElement('div');
-        el.map((item, k) =>{
+        el.map((el, k) =>{
             let span = document.createElement('span')
-			span.setAttribute('posx', k)
-			span.setAttribute('posy', i)
-            span.setAttribute('value', item)
-            span.addEventListener('click', function (event){
-                this.classList.add('active')
-                this.setAttribute('value', 1)
-				console.log(this.attributes['posx'], this.attributes['value'], event);
-			})
+			span.dataset.xy = `${k},${i}`
             div.appendChild(span)
 		});
         game.appendChild(div)
 	})
 
-	const forward = (arr, start, end) => [arr[(start + 1) % arr.length], arr[end]] = [1, 0];
+	function startSnake(){
+        let x = Math.round(Math.random() * (columnNum - 3) + 3)
+        let y = Math.round(Math.random() * (columnNum - 1) + 1)
+		return [x, y]
+	}
 	
-	function steps(arr, start, end) {
-	    arr = arr.map((el, i)=> i <= start && i >= end ? 1 : 0)
-        for (let i = 0; i < 3000; i++) {
-            let allField = document.querySelectorAll('span');
-            allField.forEach(function (el){
-                if (el.attributes['value'] === '1'){
-                    el.classList.add('active')
-                }else{
-                    el.classList.remove('active')
-                }
-            })
-			forward(arr, start, end)
-        }
-    }
-
+	const allField = document.querySelectorAll('span')
+	allField.forEach(function (el) {
+		el.addEventListener('click', function (event) {
+			this.classList.add('snakeBody')
+			console.log('[x, y] = ', startSnake())
+        })
+    })
 </script>
 </body>
 </html>
