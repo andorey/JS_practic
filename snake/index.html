@@ -103,30 +103,28 @@
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`))
             }
-
-            if ( bodySnake[0].classList.contains('food') ){
-                bodySnake[0].classList.remove('food')
-                bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
-                food()
-            }
+			foodEating(xy)
         }else if (direction === 'left'){
             if (xy[0] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${columnNum-1},${xy[1]}']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`))
             }
+			foodEating(xy)
 		}else if (direction === 'up'){
             if (xy[1] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum-1}']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`))
             }
+            foodEating(xy)
 		}else if (direction === 'down'){
             if (xy[1] + 1 === rowsNum) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`))
             }
+            foodEating(xy)
 		}
         
         bodySnake.forEach((el, i)=> i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody'))
@@ -145,6 +143,14 @@
             direction = 'down'
 		}
     })
+	
+	function foodEating(xy){
+        if ( bodySnake[0].classList.contains('food') ){
+            bodySnake[0].classList.remove('food')
+            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
+            setTimeout(food, 300)
+        }
+	}
 	
 </script>
 </body>
