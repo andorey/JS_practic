@@ -72,9 +72,7 @@
 	}
 	
 	const xy = startSnake()
-	const bodyConstr = [0,0,0];
-	let bodySnake = bodyConstr.map((el, i)=> document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`))
-	//bodySnake.forEach( (el, i) => i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody') )
+	const bodySnake = [0,0,0].map((el, i)=> document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`))
 
     function food(){
         function coordinates() {
@@ -104,6 +102,12 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`))
+            }
+
+            if ( bodySnake[0].classList.contains('food') ){
+                bodySnake[0].classList.remove('food')
+                bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
+                food()
             }
         }else if (direction === 'left'){
             if (xy[0] - 1 < 0) {
