@@ -24,13 +24,14 @@
         }
 
         #game > div > span {
-            width: 10px;
-            height: 10px;
-            border: 0.1px solid #eee;
+            width: 20px;
+            height: 20px;
+            border: 0.1pt solid #eff;
         }
 		
 		.snakeHead{
-			background-color: coral;
+			background-color: red;
+			border-radius: 25px 25px 70pt;
 		}
 		
 		.snakeBody{
@@ -38,6 +39,11 @@
 			border-radius: 50%;
 		}
 		
+		.food{
+            background-color: green;
+            border-radius: 30%;
+            border: solid 0;
+		}
 	</style>
 </head>
 <body>
@@ -45,8 +51,8 @@
 
 <script>
     const game = document.getElementById('game');
-    let columnNum = Math.floor(window.innerWidth / 12);
-    let rowsNum = Math.floor(window.innerHeight / 13);
+    let columnNum = Math.floor(window.innerWidth / 21);
+    let rowsNum = Math.floor(window.innerHeight / 25);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
     
     lineCheck.map((el, i) =>{
@@ -62,18 +68,77 @@
 	function startSnake(){
         let x = Math.round(Math.random() * (columnNum - 5) + 3)
         let y = Math.round(Math.random() * (rowsNum - 2) + 1)
-		console.log('[x,y] =', [x,y], '[columnNum, rowsNum] = ', [columnNum, rowsNum])
 		return [x, y]
 	}
 	
 	const xy = startSnake()
-	const bodySnake = [0,0,0];
+	const bodyConstr = [0,0,0];
+	let bodySnake = bodyConstr.map((el, i)=> document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`))
+	//bodySnake.forEach( (el, i) => i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody') )
+
+    function food(){
+        function coordinates() {
+            let x = Math.round(Math.random() * (columnNum - 3) + 2)
+            let y = Math.round(Math.random() * (rowsNum - 2) + 1)
+			return document.querySelector(`[data-xy='${x},${y}']`)
+        }
+        
+		let xy = coordinates()
+		while( xy.classList.contains('snakeHead') || xy.classList.contains('snakeBody') ){
+		    xy = coordinates()
+		}
+		xy.classList.add('food')
+    }
     
-    bodySnake.forEach(function (el, i) {
-		if(i === 0){
-		    document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`).classList.add('snakeHead')
-		}else{
-		    document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`).classList.add('snakeBody')
+    food()
+	
+	let direction = 'right'
+ 
+	function move() {
+	    let xy = bodySnake[0].dataset.xy.split(',').map(Number)
+        bodySnake.forEach( (el) => el.classList.remove('snakeHead', 'snakeBody') )
+        bodySnake.pop()
+		
+		if (direction === 'right') {
+            if (xy[0] + 1 === columnNum) {
+                bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`))
+            } else {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`))
+            }
+        }else if (direction === 'left'){
+            if (xy[0] - 1 < 0) {
+                bodySnake.unshift(document.querySelector(`[data-xy='${columnNum-1},${xy[1]}']`))
+            } else {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`))
+            }
+		}else if (direction === 'up'){
+            if (xy[1] - 1 < 0) {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum-1}']`))
+            } else {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`))
+            }
+		}else if (direction === 'down'){
+            if (xy[1] + 1 === rowsNum) {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`))
+            } else {
+                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`))
+            }
+		}
+        
+        bodySnake.forEach((el, i)=> i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody'))
+    }
+    
+    let interval = setInterval(move, 300)
+	
+	window.addEventListener('keydown', function (event) {
+		if( event.key === 'ArrowLeft' && direction !== 'right'){
+			direction = 'left'
+		}else if( event.key === 'ArrowRight' && direction !== 'left'){
+            direction = 'right'
+		}else if( event.key === 'ArrowUp' && direction !== 'down'){
+            direction = 'up'
+		}else if( event.key === 'ArrowDown' && direction !== 'up'){
+            direction = 'down'
 		}
     })
 	

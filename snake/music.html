@@ -4,81 +4,94 @@
 	<meta charset="utf-8">
 	<title>music box</title>
 	<style>
-		body{
+        body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-			font-size: 1.2em;
-		}
-		#panel{
-			padding-top: 80px;
-			display: inherit;
-			flex-direction: column;
-		}
-		label{
-			display: flex;
+            font-size: 1.2em;
+        }
+
+        #panel {
+            padding-top: 80px;
+            display: inherit;
+            flex-direction: column;
+        }
+
+        label {
+            display: flex;
             height: 40px;
-            width: 400px;
-			text-align: center;
-			justify-content: space-around;
-			border-radius: 40px;
-			border: #eee dotted 1px;
-		}
-		button{
-			width: 400px;
-            height: 35px;
-			border-radius: 25px;
-			font-size: 1.2em;
-			margin: 5px;
-			background-color: #2deeae;
-		}
+            width: 390px;
+			padding-left: 30px;
+            text-align: center;
+			justify-content: space-between;
+			align-items: center;
+            border-radius: 40px;
+            border: #bbb dotted 1px;
+        }
+
+        button {
+            width: 420px;
+            height: 29px;
+            border-radius: 25px;
+            font-size: 1em;
+            margin: 5px;
+            background-color: #2deeae;
+        }
 	</style>
 </head>
 <body>
 <div id="panel">
 	<label>
-	frequency
-	<input type="range" id="fIn" min="40" max="10000" oninput="show()" />
-	<span id="fOut"></span><br>
+		Frequency
+		<input type="range" id="fIn" min="40" max="10000"/>
+		<span id="fOut"></span><br>
 	</label>
 	<label>
-	type
-	<input type="range" id="tIn" min="0" max="3" oninput="show()" />
-	<span id="tOut"></span><br>
+		Type
+		<input type="range" id="tIn" min="0" max="3"/>
+		<span id="tOut"></span><br>
 	</label>
 	<label>
-	volume
-	<input type="range" id="vIn" min="0" max="100" oninput="show()" />
-	<span id="vOut"></span><br>
+		Volume
+		<input type="range" id="vIn" min="0" max="100"/>
+		<span id="vOut"></span><br>
 	</label>
 	<label>
-	duration
-	<input type="range" id="dIn" min="1" max="6000" oninput="show()" />
-	<span id="dOut"></span><br>
+		Duration
+		<input type="range" id="dIn" min="1" max="6000"/>
+		<span id="dOut"></span><br>
 	</label>
 	<div>
 		<button>Play</button>
 	</div>
-	
 </div>
 
 <script>
-    let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-    let frequency = '';
+    let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let frequency = '', volume = '', duration = '';
 
     show();
 
     function show() {
         frequency = document.getElementById("fIn").value;
-        document.getElementById("fOut").innerHTML = frequency + ' Hz';
+        document.getElementById("fOut").innerHTML = frequency.padStart(4,'0') + ' Hz';
 
         switch (document.getElementById("tIn").value * 1) {
-            case 0: type = 'sine'; break;
-            case 1: type = 'square'; break;
-            case 2: type = 'sawtooth'; break;
-            case 3: type = 'triangle'; break;
+            case 0:
+                type = 'sine';
+                break;
+            case 1:
+                type = 'square';
+                break;
+            case 2:
+                type = 'sawtooth';
+                break;
+            case 3:
+                type = 'triangle';
+                break;
         }
+        
         document.getElementById("tOut").innerHTML = type;
 
         volume = document.getElementById("vIn").value / 100;
@@ -100,17 +113,15 @@
         oscillator.type = type;
 
         oscillator.start();
-
-        setTimeout(
-            function() {
-                oscillator.stop();
-            },
-            duration
-        );
+        setTimeout( function () { oscillator.stop() }, duration );
     }
-    
-    const button = document.querySelector('button')
-	button.addEventListener("click", beep)
+
+    document.querySelector('button').addEventListener('click', beep)
+    document.querySelector('#fIn').addEventListener('input', show)
+    document.querySelector('#tIn').addEventListener('input', show)
+    document.querySelector('#vIn').addEventListener('input', show)
+    document.querySelector('#dIn').addEventListener('input', show)
+	
 </script>
 </body>
 </html>
