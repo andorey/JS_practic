@@ -12,8 +12,6 @@
 		}
 		
         #game {
-            width: 100%;
-            height: 100%;
             box-sizing: border-box;
             table-layout: fixed;
 			border: deepskyblue dotted 3px;
@@ -33,6 +31,7 @@
             width: 40px;
             height: 40px;
 			font-size: 1.2em;
+			margin-bottom: 10px;
 			border-radius: 20%;
 		}
 		
@@ -62,8 +61,8 @@
 
 <script>
     const game = document.getElementById('game');
-    let columnNum = Math.floor(window.innerWidth / 21);
-    let rowsNum = Math.floor(window.innerHeight / 25);
+    let columnNum = Math.floor(window.innerWidth / 30);
+    let rowsNum = Math.floor(window.innerHeight / 26);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
     let volume = 0.02
     
@@ -105,7 +104,7 @@
             setTimeout( function () { osc.stop() }, 550 )
 		}else{
             gainV.gain.value = volume;
-            osc.frequency.value = 310 ;
+            osc.frequency.value = 210 ;
             osc.type = 'sawtooth';
 
             osc.start();
@@ -180,11 +179,21 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`))
             }
 		}
-        foodEating(xy)
         sound(1, volume)
+
+        if ( bodySnake[0].classList.contains('food') ){
+            bodySnake[0].classList.remove('food')
+            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
+            sound(2, volume)
+            setTimeout(food, 200)
+        }
         
-        bodySnake.forEach((el, i)=> i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody'))
-        theEnd(xy)
+        bodySnake.forEach((e,i)=> i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'))
+		
+        if( bodySnake[0].classList.contains('snakeBody') ){
+            sound(3, volume)
+
+        }
     }
     
     let interval = setInterval(move, 250)
@@ -201,21 +210,6 @@
 		}
     })
 	
-	function foodEating(xy){
-        if ( bodySnake[0].classList.contains('food') ){
-            bodySnake[0].classList.remove('food')
-            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
-            sound(2, volume)
-            setTimeout(food, 300)
-        }
-	}
-	
-	function theEnd(xy) {
-		if( bodySnake[0].classList.contains('snakeBody') ){
-            sound(3, volume)
-		    
-		}
-    }
 	
 </script>
 </body>
