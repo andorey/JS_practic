@@ -30,7 +30,10 @@
         }
 		
 		#sound{
-			font-size: 12px;
+            width: 40px;
+            height: 40px;
+			font-size: 1.2em;
+			border-radius: 20%;
 		}
 		
 		#sound.active{
@@ -39,8 +42,7 @@
 		}
 		
 		.snakeHead{
-			background-color: red;
-			border-radius: 25px 25px 70pt;
+            background: radial-gradient(white 20%, red);
 		}
 		
 		.snakeBody{
@@ -49,8 +51,7 @@
 		}
 		
 		.food{
-            background: linear-gradient(#f44367, #1c8300);
-            border-radius: 70% 90% 30% 30%;
+        	background: repeating-linear-gradient(150deg, #d943f4 50%, #05ffbd);
             border: solid 0;
 		}
 	</style>
@@ -64,7 +65,7 @@
     let columnNum = Math.floor(window.innerWidth / 21);
     let rowsNum = Math.floor(window.innerHeight / 25);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
-    let volume = 0.03
+    let volume = 0.02
     
     const button  = document.querySelector('#sound');
     button.addEventListener('click', function (event) {
@@ -75,7 +76,7 @@
 		}else {
             button.classList.add('active')
             button.innerHTML = '&#9835'
-            volume = 0.03
+            volume = 0.02
         }
     })
 	
@@ -94,21 +95,21 @@
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout( function () { osc.stop() }, 50 );
+            setTimeout( function () { osc.stop() }, 5 );
         }else if( x === 3){
-            gainV.gain.value = volume;
-            osc.frequency.value = 110;
+            gainV.gain.value = volume * 2;
+            osc.frequency.value = 55;
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout( function () { osc.stop() }, 450 )
+            setTimeout( function () { osc.stop() }, 550 )
 		}else{
             gainV.gain.value = volume;
             osc.frequency.value = 310 ;
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout( function () { osc.stop() }, 180 );
+            setTimeout( function () { osc.stop() }, 100 );
         }
     }
     
@@ -160,38 +161,33 @@
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`))
             }
-			foodEating(xy)
-            sound(1, volume)
         }else if (direction === 'left'){
             if (xy[0] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${columnNum-1},${xy[1]}']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`))
             }
-			foodEating(xy)
-            sound(1,volume)
 		}else if (direction === 'up'){
             if (xy[1] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum-1}']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`))
             }
-            foodEating(xy)
-            sound(1, volume)
 		}else if (direction === 'down'){
             if (xy[1] + 1 === rowsNum) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`))
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`))
             }
-            foodEating(xy)
-            sound(1, volume)
 		}
+        foodEating(xy)
+        sound(1, volume)
         
         bodySnake.forEach((el, i)=> i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody'))
+        theEnd(xy)
     }
     
-    let interval = setInterval(move, 230)
+    let interval = setInterval(move, 250)
 	
 	window.addEventListener('keydown', function (event) {
 		if( event.key === 'ArrowLeft' && direction !== 'right'){
@@ -209,11 +205,17 @@
         if ( bodySnake[0].classList.contains('food') ){
             bodySnake[0].classList.remove('food')
             bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
-            sound(3, volume)
+            sound(2, volume)
             setTimeout(food, 300)
         }
 	}
 	
+	function theEnd(xy) {
+		if( bodySnake[0].classList.contains('snakeBody') ){
+            sound(3, volume)
+		    
+		}
+    }
 	
 </script>
 </body>
