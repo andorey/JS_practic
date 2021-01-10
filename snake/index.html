@@ -14,7 +14,7 @@
         #game {
             box-sizing: border-box;
             table-layout: fixed;
-			border: deepskyblue dotted 3px;
+			border: deepskyblue double 7px;
         }
 
         #game > div {
@@ -53,6 +53,35 @@
         	background: repeating-linear-gradient(150deg, #d943f4 50%, #05ffbd);
             border: solid 0;
 		}
+
+        .field{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+			align-items: center;
+            justify-content: space-between;
+            align-content: space-around;
+            text-shadow: #026269 -2px -3px 5px;
+            height: 100%;
+            width: 100%;
+            color: rgb(255, 255, 255);
+            font-size: 4.1em;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.10)
+        }
+
+        .button{
+            margin-bottom: 40px;
+            font-size: 18px;
+            background: #007288;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 9px;
+            box-shadow: white 0 0 15px;
+        }
 	</style>
 </head>
 <body>
@@ -61,10 +90,11 @@
 
 <script>
     const game = document.getElementById('game');
-    let columnNum = Math.floor(window.innerWidth / 30);
+    let columnNum = Math.floor(window.innerWidth / 32);
     let rowsNum = Math.floor(window.innerHeight / 26);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
     let volume = 0.02
+	let mice = 3;
     
     const button  = document.querySelector('#sound');
     button.addEventListener('click', function (event) {
@@ -138,11 +168,11 @@
 			return document.querySelector(`[data-xy='${x},${y}']`)
         }
         
-		let xy = coordinates()
-		while( xy.classList.contains('snakeHead') || xy.classList.contains('snakeBody') ){
-		    xy = coordinates()
+		let mouse = [0,0,0].map(coordinates)
+		while( mouse.every(el=> el.classList.contains('snakeHead') || el.classList.contains('snakeBody')) ){
+		    mouse = [0,0,0].map(coordinates)
 		}
-		xy.classList.add('food')
+		mouse.map(el => el.classList.add('food'))
     }
     
     food()
@@ -185,18 +215,23 @@
             bodySnake[0].classList.remove('food')
             bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
             sound(2, volume)
-            setTimeout(food, 200)
+			mice -= 1
+			if( mice < 1 ){
+                setTimeout(food, 200)
+				mice = 3
+			}
         }
         
         bodySnake.forEach((e,i)=> i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'))
 		
         if( bodySnake[0].classList.contains('snakeBody') ){
             sound(3, volume)
-
+			clearInterval(interval)
+			restartGame()
         }
     }
     
-    let interval = setInterval(move, 250)
+    let interval = setInterval(move, 200)
 	
 	window.addEventListener('keydown', function (event) {
 		if( event.key === 'ArrowLeft' && direction !== 'right'){
@@ -209,8 +244,19 @@
             direction = 'down'
 		}
     })
-	
-	
+
+    function restartGame() {
+        let body = document.querySelector('body')
+        let div = document.createElement('div')
+        div.className = 'field';
+        div.innerHTML = '<br><div>GAME OVER!</div>';
+        body.appendChild(div)
+        let button = document.createElement('button')
+        button.innerHTML = 'RESTART'
+        button.className = 'button'
+        div.appendChild(button)
+        button.addEventListener('click', () => location.reload())
+    }
 </script>
 </body>
 </html>
