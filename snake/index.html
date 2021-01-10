@@ -29,24 +29,34 @@
             border: 0.1pt solid #eff;
         }
 		
+		#sound{
+			font-size: 12px;
+		}
+		
+		#sound.active{
+			background-color: cornflowerblue;
+			color: white;
+		}
+		
 		.snakeHead{
 			background-color: red;
 			border-radius: 25px 25px 70pt;
 		}
 		
 		.snakeBody{
-			background-color: cornflowerblue;
+			background: linear-gradient(#05ba05, #4b885d, #2785c9, #b6f4aa);
 			border-radius: 50%;
 		}
 		
 		.food{
-            background-color: green;
-            border-radius: 30%;
+            background: linear-gradient(#f44367, #1c8300);
+            border-radius: 70% 90% 30% 30%;
             border: solid 0;
 		}
 	</style>
 </head>
 <body>
+<button id="sound" class="active">&#9835</button>
 <div id="game"></div>
 
 <script>
@@ -54,6 +64,53 @@
     let columnNum = Math.floor(window.innerWidth / 21);
     let rowsNum = Math.floor(window.innerHeight / 25);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
+    let volume = 0.03
+    
+    const button  = document.querySelector('#sound');
+    button.addEventListener('click', function (event) {
+        if( button.classList.contains('active')){
+            button.classList.remove('active')
+			button.innerHTML = '&#9835'
+			volume = 0
+		}else {
+            button.classList.add('active')
+            button.innerHTML = '&#9835'
+            volume = 0.03
+        }
+    })
+	
+	const audCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function sound(x) {
+        const osc = audCtx.createOscillator();
+        const gainV = audCtx.createGain();
+
+        osc.connect(gainV);
+        gainV.connect(audCtx.destination);
+
+        if ( x === 1 ){
+            gainV.gain.value = volume;
+            osc.frequency.value = 410;
+            osc.type = 'sawtooth';
+
+            osc.start();
+            setTimeout( function () { osc.stop() }, 50 );
+        }else if( x === 3){
+            gainV.gain.value = volume;
+            osc.frequency.value = 110;
+            osc.type = 'sawtooth';
+
+            osc.start();
+            setTimeout( function () { osc.stop() }, 450 )
+		}else{
+            gainV.gain.value = volume;
+            osc.frequency.value = 310 ;
+            osc.type = 'sawtooth';
+
+            osc.start();
+            setTimeout( function () { osc.stop() }, 180 );
+        }
+    }
     
     lineCheck.map((el, i) =>{
         let div = document.createElement('div');
@@ -104,6 +161,7 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`))
             }
 			foodEating(xy)
+            sound(1, volume)
         }else if (direction === 'left'){
             if (xy[0] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${columnNum-1},${xy[1]}']`))
@@ -111,6 +169,7 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`))
             }
 			foodEating(xy)
+            sound(1,volume)
 		}else if (direction === 'up'){
             if (xy[1] - 1 < 0) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum-1}']`))
@@ -118,6 +177,7 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`))
             }
             foodEating(xy)
+            sound(1, volume)
 		}else if (direction === 'down'){
             if (xy[1] + 1 === rowsNum) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`))
@@ -125,12 +185,13 @@
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`))
             }
             foodEating(xy)
+            sound(1, volume)
 		}
         
         bodySnake.forEach((el, i)=> i === 0 ? el.classList.add('snakeHead') : el.classList.add('snakeBody'))
     }
     
-    let interval = setInterval(move, 300)
+    let interval = setInterval(move, 230)
 	
 	window.addEventListener('keydown', function (event) {
 		if( event.key === 'ArrowLeft' && direction !== 'right'){
@@ -148,9 +209,11 @@
         if ( bodySnake[0].classList.contains('food') ){
             bodySnake[0].classList.remove('food')
             bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
+            sound(3, volume)
             setTimeout(food, 300)
         }
 	}
+	
 	
 </script>
 </body>

@@ -68,7 +68,7 @@
 </div>
 
 <script>
-    let audioCtx = new (window.AudioContext )();
+    let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     let frequency = '', volume = '', duration = '';
 
     show();
