@@ -50,8 +50,9 @@
 		}
 		
 		.food{
-        	background: repeating-linear-gradient(150deg, #d943f4 50%, #05ffbd);
+        	background: repeating-linear-gradient(200deg, #d943f4 50%, #05ffbd);
             border: solid 0;
+			border-radius: 50% 50% 0 0;
 		}
 
         .field{
@@ -67,7 +68,7 @@
             text-shadow: #026269 -2px -3px 5px;
             height: 100%;
             width: 100%;
-            color: rgb(255, 255, 255);
+            color: rgb(232, 27, 27);
             font-size: 4.1em;
             font-weight: bold;
             background-color: rgba(0, 0, 0, 0.10)
@@ -82,19 +83,48 @@
             border-radius: 9px;
             box-shadow: white 0 0 15px;
         }
+		
+		#header{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            align-content: first baseline;
+            width: 100%;
+			font-size: 20px;
+		}
+		
+		.counter{
+            font-family: Arial, Helvetica, sans-serif;
+            height: 34px;
+            width: 150px;
+			font-size: 1.3em;
+			text-align: left;
+			padding-bottom: 10px;
+			color: #32a78d;
+		}
+		
+		.score{
+			font-size: 25px;
+			color: cornflowerblue;
+		}
 	</style>
 </head>
 <body>
-<button id="sound" class="active">&#9835</button>
+<div id="header">
+	<span class="score"><u>Total score:</u>&nbsp;&nbsp;<span class="counter">0</span></span>
+	<button id="sound" class="active">&#9835</button>
+</div>
 <div id="game"></div>
 
 <script>
     const game = document.getElementById('game');
-    let columnNum = Math.floor(window.innerWidth / 32);
+    let columnNum = Math.floor(window.innerWidth / 34);
     let rowsNum = Math.floor(window.innerHeight / 26);
     let lineCheck = Array.from({length: rowsNum}, () => Array.from({length: columnNum}, () => 0));
     let volume = 0.02
 	let mice = 3;
+    let errors = false;
+    let counter = document.querySelector('.counter')
     
     const button  = document.querySelector('#sound');
     button.addEventListener('click', function (event) {
@@ -169,7 +199,7 @@
         }
         
 		let mouse = [0,0,0].map(coordinates)
-		while( mouse.every(el=> el.classList.contains('snakeHead') || el.classList.contains('snakeBody')) ){
+		while( mouse.some(el=> el.classList.contains('snakeHead') || el.classList.contains('snakeBody')) ){
 		    mouse = [0,0,0].map(coordinates)
 		}
 		mouse.map(el => el.classList.add('food'))
@@ -210,17 +240,7 @@
             }
 		}
         sound(1, volume)
-
-        if ( bodySnake[0].classList.contains('food') ){
-            bodySnake[0].classList.remove('food')
-            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
-            sound(2, volume)
-			mice -= 1
-			if( mice < 1 ){
-                setTimeout(food, 200)
-				mice = 3
-			}
-        }
+		errors = true;
         
         bodySnake.forEach((e,i)=> i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'))
 		
@@ -229,20 +249,38 @@
 			clearInterval(interval)
 			restartGame()
         }
+
+        if ( bodySnake[0].classList.contains('food') ){
+            bodySnake[0].classList.remove('food')
+            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`))
+            sound(2, volume)
+            mice -= 1
+            if( mice < 1 ){
+                setTimeout(food, 200)
+                mice = 3
+            }
+            counter.innerHTML = Number(counter.innerHTML) + 10;
+        }
     }
     
     let interval = setInterval(move, 200)
 	
 	window.addEventListener('keydown', function (event) {
-		if( event.key === 'ArrowLeft' && direction !== 'right'){
-			direction = 'left'
-		}else if( event.key === 'ArrowRight' && direction !== 'left'){
-            direction = 'right'
-		}else if( event.key === 'ArrowUp' && direction !== 'down'){
-            direction = 'up'
-		}else if( event.key === 'ArrowDown' && direction !== 'up'){
-            direction = 'down'
-		}
+	    if ( errors === true ) {
+            if (event.key === 'ArrowLeft' && direction !== 'right') {
+                direction = 'left'
+				errors = false;
+            } else if (event.key === 'ArrowRight' && direction !== 'left') {
+                direction = 'right'
+				errors = false;
+            } else if (event.key === 'ArrowUp' && direction !== 'down') {
+                direction = 'up'
+				errors = false;
+            } else if (event.key === 'ArrowDown' && direction !== 'up') {
+                direction = 'down'
+				errors = false;
+            }
+        }
     })
 
     function restartGame() {
