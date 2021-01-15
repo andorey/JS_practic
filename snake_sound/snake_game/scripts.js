@@ -1,11 +1,11 @@
-const game = document.getElementById('game');
-const columnNum = Math.floor(window.innerWidth / 34);
-const rowsNum = Math.floor(window.innerHeight / 26);
-const lineCheck = Array.from( {length: rowsNum}, ()=> Array.from({length: columnNum}, ()=> 0) );
-const audCtx = new (window.AudioContext || window.webkitAudioContext)();
-const buttonSound = document.querySelector('#sound');
-
 (function () {
+    const game = document.getElementById('game');
+    const columnNum = Math.floor(window.innerWidth / 34);
+    const rowsNum = Math.floor(window.innerHeight / 26);
+    const lineCheck = Array.from( {length: rowsNum}, ()=> Array.from({length: columnNum}, ()=> 0) );
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buttonSound = document.querySelector('#sound');
+
     let [volume, mice, errors] = [0.02, 3, false];
     let counter = document.querySelector('.counter');
     let direction = 'right';
@@ -14,28 +14,28 @@ const buttonSound = document.querySelector('#sound');
     lineCheck.forEach((el, i) => {
         let div = document.createElement('div');
         el.map((el, k) => {
-            let span = document.createElement('span')
-            span.dataset.xy = `${k},${i}`
-            div.appendChild(span)
+            let span = document.createElement('span');
+            span.dataset.xy = `${k},${i}`;
+            div.appendChild(span);
         });
-        game.appendChild(div)
+        game.appendChild(div);
     })
 
-    const xy = startSnake()
-    const bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`))
-    food()
+    const xy = startSnake();
+    const bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`));
+    food();
 
     function startSnake() {
-        let x = Math.round(Math.random() * (columnNum - 5) + 3)
-        let y = Math.round(Math.random() * (rowsNum - 2) + 1)
-        return [x, y]
+        let x = Math.round(Math.random() * (columnNum - 5) + 3);
+        let y = Math.round(Math.random() * (rowsNum - 2) + 1);
+        return [x, y];
     }
 
     function food() {
         function coordinates() {
-            let x = Math.round(Math.random() * (columnNum - 3) + 2)
-            let y = Math.round(Math.random() * (rowsNum - 2) + 1)
-            return document.querySelector(`[data-xy='${x},${y}']`)
+            let x = Math.round(Math.random() * (columnNum - 3) + 2);
+            let y = Math.round(Math.random() * (rowsNum - 2) + 1);
+            return document.querySelector(`[data-xy='${x},${y}']`);
         }
 
         let mouse = [0, 0, 0].map(coordinates);
@@ -54,17 +54,17 @@ const buttonSound = document.querySelector('#sound');
         bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
         bodySnake.pop();
 
-        directions(direction, xy);
-        sound(1, volume);
+        moveDirect(direction, xy);
+        soundEffect('eat');
         errors = true;
 
-        bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'))
-        restartGame()
+        bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
+        restartGame();
 
         if (bodySnake[0].classList.contains('food')) {
             bodySnake[0].classList.remove('food');
             bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
-            sound(2, volume);
+            soundEffect();
             mice -= 1;
 
             if ( mice < 1 ) {
@@ -75,7 +75,7 @@ const buttonSound = document.querySelector('#sound');
         }
     }
 
-    function directions(direction, xy) {
+    function moveDirect(direction, xy) {
         if (direction === 'right') {
             if (xy[0] + 1 === columnNum) {
                 bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
@@ -105,16 +105,16 @@ const buttonSound = document.querySelector('#sound');
 
     function restartGame() {
         if (bodySnake[0].classList.contains('snakeBody')) {
-            sound(3, volume)
-            clearInterval(interval)
+            soundEffect('die');
+            clearInterval(interval);
 
-            let body = document.querySelector('body')
-            let div = document.createElement('div')
+            let body = document.querySelector('body');
+            let div = document.createElement('div');
             div.className = 'field';
             div.innerHTML = '<br><div>GAME OVER!</div>';
             body.appendChild(div);
 
-            let button = document.createElement('button')
+            let button = document.createElement('button');
             button.innerHTML = 'RESTART';
             button.className = 'button';
             div.appendChild(button);
@@ -122,23 +122,23 @@ const buttonSound = document.querySelector('#sound');
         }
     }
 
-    function sound(x) {
-        const osc = audCtx.createOscillator();
-        const gainV = audCtx.createGain();
+    function soundEffect(x) {
+        const osc = audioCtx.createOscillator();
+        const gainV = audioCtx.createGain();
 
         osc.connect(gainV);
-        gainV.connect(audCtx.destination);
+        gainV.connect(audioCtx.destination);
 
-        if (x === 1) {
+        if (x === 'eat') {
             gainV.gain.value = volume;
             osc.frequency.value = 410;
             osc.type = 'sawtooth';
 
             osc.start();
             setTimeout(function () {
-                osc.stop()
+                osc.stop();
             }, 5);
-        } else if (x === 3) {
+        } else if (x === 'die') {
             gainV.gain.value = volume * 2;
             osc.frequency.value = 55;
             osc.type = 'sawtooth';
