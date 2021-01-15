@@ -2,12 +2,12 @@
     const game = document.getElementById('game');
     const columnNum = Math.floor(window.innerWidth / 34);
     const rowsNum = Math.floor(window.innerHeight / 26);
-    const lineCheck = Array.from( {length: rowsNum}, ()=> Array.from({length: columnNum}, ()=> 0) );
+    const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const buttonSound = document.querySelector('#sound');
 
     let [volume, mice, errors] = [0.02, 3, false];
-    let counter = document.querySelector('.counter');
+    let counter = game.querySelector('.counter');
     let direction = 'right';
     let interval = setInterval(move, 200);
 
@@ -76,26 +76,26 @@
     }
 
     function moveDirect(direction, xy) {
-        if (direction === 'right') {
-            if (xy[0] + 1 === columnNum) {
+        if ( direction === 'right' ) {
+            if ( xy[0] + 1 === columnNum ) {
                 bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
             }
-        } else if (direction === 'left') {
-            if (xy[0] - 1 < 0) {
+        } else if ( direction === 'left' ) {
+            if ( xy[0] - 1 < 0 ) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${columnNum - 1},${xy[1]}']`));
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
             }
-        } else if (direction === 'up') {
-            if (xy[1] - 1 < 0) {
+        } else if ( direction === 'up' ) {
+            if ( xy[1] - 1 < 0 ) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum - 1}']`));
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
             }
-        } else if (direction === 'down') {
-            if (xy[1] + 1 === rowsNum) {
+        } else if ( direction === 'down' ) {
+            if ( xy[1] + 1 === rowsNum ) {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`));
             } else {
                 bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
@@ -104,7 +104,7 @@
     }
 
     function restartGame() {
-        if (bodySnake[0].classList.contains('snakeBody')) {
+        if ( bodySnake[0].classList.contains('snakeBody') ) {
             soundEffect('die');
             clearInterval(interval);
 
@@ -122,14 +122,14 @@
         }
     }
 
-    function soundEffect(x) {
+    function soundEffect(action) {
         const osc = audioCtx.createOscillator();
         const gainV = audioCtx.createGain();
 
         osc.connect(gainV);
         gainV.connect(audioCtx.destination);
 
-        if (x === 'eat') {
+        if ( action === 'eat' ) {
             gainV.gain.value = volume;
             osc.frequency.value = 410;
             osc.type = 'sawtooth';
@@ -138,7 +138,7 @@
             setTimeout(function () {
                 osc.stop();
             }, 5);
-        } else if (x === 'die') {
+        } else if ( action === 'die' ) {
             gainV.gain.value = volume * 2;
             osc.frequency.value = 55;
             osc.type = 'sawtooth';
@@ -161,16 +161,16 @@
 
     window.addEventListener('keydown', function (event) {
         if (errors === true) {
-            if (event.key === 'ArrowLeft' && direction !== 'right') {
+            if ( event.key === 'ArrowLeft' && direction !== 'right' ) {
                 direction = 'left';
                 errors = false;
-            } else if (event.key === 'ArrowRight' && direction !== 'left') {
+            } else if ( event.key === 'ArrowRight' && direction !== 'left' ) {
                 direction = 'right';
                 errors = false;
-            } else if (event.key === 'ArrowUp' && direction !== 'down') {
+            } else if ( event.key === 'ArrowUp' && direction !== 'down' ) {
                 direction = 'up';
                 errors = false;
-            } else if (event.key === 'ArrowDown' && direction !== 'up') {
+            } else if ( event.key === 'ArrowDown' && direction !== 'up' ) {
                 direction = 'down';
                 errors = false;
             }
@@ -178,7 +178,7 @@
     })
 
     buttonSound.addEventListener('click', function () {
-        if (buttonSound.classList.contains('active')) {
+        if ( buttonSound.classList.contains('active') ) {
             buttonSound.classList.remove('active');
             buttonSound.innerHTML = '&#9835';
             volume = 0;
