@@ -5,9 +5,9 @@
     const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const buttonSound = document.querySelector('#sound');
+    const counter = document.querySelector('.counter');
 
     let [volume, mice, errors] = [0.02, 3, false];
-    let counter = game.querySelector('.counter');
     let direction = 'right';
     let interval = setInterval(move, 200);
 
@@ -110,13 +110,13 @@
 
             let body = document.querySelector('body');
             let div = document.createElement('div');
-            div.className = 'field';
-            div.innerHTML = '<br><div>GAME OVER!</div>';
+            div.classList.add('field');
+            div.innerHTML = '<span>GAME OVER!</span>';
             body.appendChild(div);
 
             let button = document.createElement('button');
             button.innerHTML = 'RESTART';
-            button.className = 'button';
+            button.classList.add('button');
             div.appendChild(button);
             button.addEventListener('click', () => location.reload());
         }
