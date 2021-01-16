@@ -50,9 +50,10 @@ body {
 }
 
 .field {
+    position: absolute;
     height: 100%;
     width: 100%;
-    color: rgb(232, 27, 27);
+    color: orangered;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -61,17 +62,19 @@ body {
     text-shadow: #026269 -2px -3px 5px;
     font-size: 4.1em;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.12)
+    background-color: rgba(0, 0, 0, 0.19)
 }
 
 
 .button {
+    margin-top: 10%;
     font-size: 18px;
     background: #007288;
     color: white;
     padding: 10px 20px;
     border-radius: 9px;
-    box-shadow: white 0 0 14px;
+    box-shadow: white 0 0 10px,
+                white 1px 1px 19px;
 }
 
 #header {
