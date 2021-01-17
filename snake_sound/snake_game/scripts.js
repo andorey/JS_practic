@@ -11,23 +11,6 @@
     let direction = 'right';
     let interval = setInterval(move, 200);
 
-    // let header = document.createElement('div');
-    // let score = document.createElement('span');
-    // let counter = document.createElement('span');
-    // let sound = document.createElement('button');
-    // header.classList.add('header');
-    // score.classList.add('score');
-    // score.innerHTML= '<u>Total score:</u>  ';
-    // counter.classList.add('counter');
-    // counter.innerHTML = 0;
-    // score.appendChild(counter);
-    // header.appendChild(score);
-    // sound.classList.add('sound');
-    // sound.classList.add('active');
-    // sound.innerHTML = '&#9835';
-    // header.append(sound);
-    // game.appendChild(header);
-
     lineCheck.forEach((el, i) => {
         let div = document.createElement('div');
         el.map((el, k) => {
