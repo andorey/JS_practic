@@ -51,8 +51,8 @@ body {
 }
 
 .counter > span {
-    color: #8ccb2c;
-    font-size: 30px;
+    color: #5ec228;
+    font-size: 40px;
 }
 
 .snakeHead {
@@ -60,7 +60,7 @@ body {
 }
 
 .snakeBody {
-    background: linear-gradient(#05ba05, #4b885d, #2785c9, #b6f4aa);
+    background: linear-gradient(#616346, #237942, #2785c9, #b6f4aa);
     border-radius: 50%;
 }
 
