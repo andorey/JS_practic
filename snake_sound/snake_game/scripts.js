@@ -1,21 +1,20 @@
 (function () {
-    const game = document.getElementById('game');
-    const columnNum = Math.floor(window.innerWidth / 34);
-    const rowsNum = Math.floor(window.innerHeight / 26);
-    const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const buttonSound = document.querySelector('#sound');
-    const counter = document.querySelector('.counter');
 
-    let [volume, mice, errors] = [0.02, 3, false];
-    let direction = 'right';
-    let interval = setInterval(move, 200);
+    // lineCheck.forEach((el, i) => {
+    //     let div = document.createElement('div');
+    //     el.map((el, k) => {
+    //         let span = document.createElement('span');
+    //         span.dataset.xy = `${k},${i}`;
+    //         div.appendChild(span);
+    //     });
+    //     game.appendChild(div);
+    // })
 
     class CreateField {
         constructor(field) {
             this.field = field;
         }
-        render(){
+        draw(){
             this.field.forEach((el, i) => {
                 let div = document.createElement('div');
                 el.map((el, k) => {
@@ -28,35 +27,37 @@
         }
     }
 
-    // lineCheck.forEach((el, i) => {
-    //     let div = document.createElement('div');
-    //     el.map((el, k) => {
-    //         let span = document.createElement('span');
-    //         span.dataset.xy = `${k},${i}`;
-    //         div.appendChild(span);
-    //     });
-    //     game.appendChild(div);
-    // })
+    const general = document.getElementById('general');
+    const game = general.querySelector('#game');
+    const columnNum = Math.floor(window.innerWidth / 34);
+    const rowsNum = Math.floor(window.innerHeight / 26);
+    const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buttonSound = general.querySelector('#sound');
+    const counter = general.querySelector('.counter');
 
-    new CreateField(lineCheck).render()
+    let [volume, mice, errors] = [0.02, 3, false];
+    let direction = 'right';
+    let interval = setInterval(move, 200);
 
-    const xy = startSnake();
-    const bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`));
+    new CreateField(lineCheck).draw()
+
+    const [x, y] = coordinates('snake');
+    const bodySnake = [0, 0, 0].map((el, i) => general.querySelector(`[data-xy='${x - i},${y}']`));
     food();
 
-    function startSnake() {
-        let x = Math.round(Math.random() * (columnNum - 5) + 3);
+    function coordinates( str ) {
+        let x = Math.round(Math.random() * (columnNum - 4) + 2);
         let y = Math.round(Math.random() * (rowsNum - 2) + 1);
-        return [x, y];
+
+        if ( str === 'snake' ) {
+            return [x, y];
+        }else{
+            return general.querySelector(`[data-xy='${x},${y}']`);
+        }
     }
 
     function food() {
-        function coordinates() {
-            let x = Math.round(Math.random() * (columnNum - 3) + 2);
-            let y = Math.round(Math.random() * (rowsNum - 2) + 1);
-            return document.querySelector(`[data-xy='${x},${y}']`);
-        }
-
         let mouse = [0, 0, 0].map(coordinates);
 
         while (mouse.some(el => el.classList.contains('snakeHead') ||
@@ -82,7 +83,7 @@
 
         if (bodySnake[0].classList.contains('food')) {
             bodySnake[0].classList.remove('food');
-            bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
+            bodySnake.push(general.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
             soundEffect();
             mice -= 1;
 
@@ -97,27 +98,27 @@
     function moveDirect(direction, xy) {
         if ( direction === 'right' ) {
             if ( xy[0] + 1 === columnNum ) {
-                bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='0,${xy[1]}']`));
             } else {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
             }
         } else if ( direction === 'left' ) {
             if ( xy[0] - 1 < 0 ) {
-                bodySnake.unshift(document.querySelector(`[data-xy='${columnNum - 1},${xy[1]}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${columnNum - 1},${xy[1]}']`));
             } else {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
             }
         } else if ( direction === 'up' ) {
             if ( xy[1] - 1 < 0 ) {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${rowsNum - 1}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0]},${rowsNum - 1}']`));
             } else {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
             }
         } else if ( direction === 'down' ) {
             if ( xy[1] + 1 === rowsNum ) {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0]},0']`));
             } else {
-                bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
+                bodySnake.unshift(general.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
             }
         }
     }
@@ -127,11 +128,10 @@
             soundEffect('die');
             clearInterval(interval);
 
-            let body = document.querySelector('body');
             let div = document.createElement('div');
             div.classList.add('field');
             div.innerHTML = '<div>GAME OVER!</div>';
-            body.appendChild(div);
+            general.appendChild(div);
 
             let button = document.createElement('button');
             button.innerHTML = 'RESTART';

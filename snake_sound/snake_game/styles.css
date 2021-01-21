@@ -1,4 +1,4 @@
-body {
+#general {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,11 +26,12 @@ body {
     height: 40px;
     font-size: 1.2em;
     margin-bottom: 10px;
+    padding-left: 7px;
     border-radius: 20%;
 }
 
 #sound.active {
-    background-color: cornflowerblue;
+    background-color: #47db14;
     color: white;
 }
 
