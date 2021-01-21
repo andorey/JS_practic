@@ -11,15 +11,34 @@
     let direction = 'right';
     let interval = setInterval(move, 200);
 
-    lineCheck.forEach((el, i) => {
-        let div = document.createElement('div');
-        el.map((el, k) => {
-            let span = document.createElement('span');
-            span.dataset.xy = `${k},${i}`;
-            div.appendChild(span);
-        });
-        game.appendChild(div);
-    })
+    class CreateField {
+        constructor(field) {
+            this.field = field;
+        }
+        render(){
+            this.field.forEach((el, i) => {
+                let div = document.createElement('div');
+                el.map((el, k) => {
+                    let span = document.createElement('span');
+                    span.dataset.xy = `${k},${i}`;
+                    div.appendChild(span);
+                });
+                game.appendChild(div);
+            })
+        }
+    }
+
+    // lineCheck.forEach((el, i) => {
+    //     let div = document.createElement('div');
+    //     el.map((el, k) => {
+    //         let span = document.createElement('span');
+    //         span.dataset.xy = `${k},${i}`;
+    //         div.appendChild(span);
+    //     });
+    //     game.appendChild(div);
+    // })
+
+    new CreateField(lineCheck).render()
 
     const xy = startSnake();
     const bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${xy[0] - i},${xy[1]}']`));
@@ -180,13 +199,12 @@
     buttonSound.addEventListener('click', function () {
         if ( buttonSound.classList.contains('active') ) {
             buttonSound.classList.remove('active');
-            buttonSound.innerHTML = '&#9835';
             volume = 0;
 
         } else {
             buttonSound.classList.add('active');
-            buttonSound.innerHTML = '&#9835';
             volume = 0.02;
         }
     })
+
 }())
