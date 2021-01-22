@@ -27,6 +27,7 @@
         }
     }
 
+
     const general = document.getElementById('general');
     const game = general.querySelector('#game');
     const columnNum = Math.floor(window.innerWidth / 34);
@@ -154,27 +155,21 @@
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout(function () {
-                osc.stop();
-            }, 5);
+            setTimeout( () => osc.stop(), 5);
         } else if ( action === 'die' ) {
             gainV.gain.value = volume * 2;
             osc.frequency.value = 55;
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout(function () {
-                osc.stop()
-            }, 550)
+            setTimeout( () => osc.stop(), 550)
         } else {
             gainV.gain.value = volume;
             osc.frequency.value = 210;
             osc.type = 'sawtooth';
 
             osc.start();
-            setTimeout(function () {
-                osc.stop()
-            }, 100);
+            setTimeout( () => osc.stop(), 100);
         }
     }
 
