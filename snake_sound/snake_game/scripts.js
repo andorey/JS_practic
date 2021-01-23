@@ -10,6 +10,37 @@
     //     game.appendChild(div);
     // })
 
+    // function soundEffect(action) {
+    //     const osc = audioCtx.createOscillator();
+    //     const gainV = audioCtx.createGain();
+    //
+    //     osc.connect(gainV);
+    //     gainV.connect(audioCtx.destination);
+    //
+    //     if ( action === 'eat' ) {
+    //         gainV.gain.value = volume;
+    //         osc.frequency.value = 410;
+    //         osc.type = 'sawtooth';
+    //
+    //         osc.start();
+    //         setTimeout(() => osc.stop(), 5);
+    //     } else if ( action === 'die' ) {
+    //         gainV.gain.value = volume * 2;
+    //         osc.frequency.value = 55;
+    //         osc.type = 'sawtooth';
+    //
+    //         osc.start();
+    //         setTimeout(() => osc.stop(), 550)
+    //     } else {
+    //         gainV.gain.value = volume;
+    //         osc.frequency.value = 210;
+    //         osc.type = 'sawtooth';
+    //
+    //         osc.start();
+    //         setTimeout(() => osc.stop(), 100);
+    //     }
+    // }
+
     class CreateField {
         constructor(field) {
             this.field = field;
@@ -27,13 +58,50 @@
         }
     }
 
+    class Sound {
+        constructor(action) {
+            this.action = action
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        soundEffect() {
+            const osc = this.audioCtx.createOscillator();
+            const gainV = this.audioCtx.createGain();
+
+            osc.connect(gainV);
+            gainV.connect(this.audioCtx.destination);
+
+            if ( this.action === 'eat' ) {
+                gainV.gain.value = volume;
+                osc.frequency.value = 410;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 5);
+            } else if ( this.action === 'die' ) {
+                gainV.gain.value = volume * 2;
+                osc.frequency.value = 55;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 550)
+            } else {
+                gainV.gain.value = volume;
+                osc.frequency.value = 210;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 100);
+            }
+        }
+    }
+
 
     const general = document.getElementById('general');
     const game = general.querySelector('#game');
     const columnNum = Math.floor(window.innerWidth / 34);
     const rowsNum = Math.floor(window.innerHeight / 26);
     const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    //const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const buttonSound = general.querySelector('#sound');
     const counter = general.querySelector('.counter');
 
@@ -76,7 +144,7 @@
         bodySnake.pop();
 
         moveDirect(direction, xy);
-        soundEffect('eat');
+        new Sound('eat').soundEffect();
         errors = true;
 
         bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
@@ -85,7 +153,7 @@
         if (bodySnake[0].classList.contains('food')) {
             bodySnake[0].classList.remove('food');
             bodySnake.push(general.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
-            soundEffect();
+            new Sound().soundEffect();
             mice -= 1;
 
             if ( mice < 1 ) {
@@ -126,7 +194,7 @@
 
     function restartGame() {
         if ( bodySnake[0].classList.contains('snakeBody') ) {
-            soundEffect('die');
+            new Sound('die').soundEffect();
             clearInterval(interval);
 
             let div = document.createElement('div');
@@ -139,37 +207,6 @@
             button.classList.add('button');
             div.appendChild(button);
             button.addEventListener('click', () => location.reload());
-        }
-    }
-
-    function soundEffect(action) {
-        const osc = audioCtx.createOscillator();
-        const gainV = audioCtx.createGain();
-
-        osc.connect(gainV);
-        gainV.connect(audioCtx.destination);
-
-        if ( action === 'eat' ) {
-            gainV.gain.value = volume;
-            osc.frequency.value = 410;
-            osc.type = 'sawtooth';
-
-            osc.start();
-            setTimeout( () => osc.stop(), 5);
-        } else if ( action === 'die' ) {
-            gainV.gain.value = volume * 2;
-            osc.frequency.value = 55;
-            osc.type = 'sawtooth';
-
-            osc.start();
-            setTimeout( () => osc.stop(), 550)
-        } else {
-            gainV.gain.value = volume;
-            osc.frequency.value = 210;
-            osc.type = 'sawtooth';
-
-            osc.start();
-            setTimeout( () => osc.stop(), 100);
         }
     }
 
