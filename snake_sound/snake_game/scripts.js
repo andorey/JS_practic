@@ -41,7 +41,6 @@
     //     }
     // }
 
-
     class CreateField {
         constructor(field) {
             this.field = field;
@@ -57,29 +56,33 @@
                 game.appendChild(div);
             })
         }
+
+        _coordinates() {
+
+        }
     }
 
     class Sound {
         constructor() {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        soundEffect(x) {
+        soundEffect(action) {
             const osc = this.audioCtx.createOscillator();
             const gainV = this.audioCtx.createGain();
 
             osc.connect(gainV);
             gainV.connect(this.audioCtx.destination);
 
-            if ( x === 'eat' ) {
+            if ( action === 'move' ) {
                 gainV.gain.value = volume;
                 osc.frequency.value = 410;
                 osc.type = 'sawtooth';
 
                 osc.start();
                 setTimeout(() => osc.stop(), 5);
-            } else if ( x === 'die' ) {
+            } else if ( action === 'die' ) {
                 gainV.gain.value = volume * 2;
-                osc.frequency.value = 55;
+                osc.frequency.value = 59;
                 osc.type = 'sawtooth';
 
                 osc.start();
@@ -95,12 +98,11 @@
         }
     }
 
-    const general = document.getElementById('general');
+    const general = document.getElementById('content');
     const game = general.querySelector('#game');
     const columnNum = Math.floor(window.innerWidth / 34);
     const rowsNum = Math.floor(window.innerHeight / 26);
     const lineCheck = Array.from( {length: rowsNum}, () => Array.from({length: columnNum}, () => 0) );
-    //const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const sounds = new Sound();
     const buttonSound = general.querySelector('#sound');
     const counter = general.querySelector('.counter');
@@ -144,7 +146,7 @@
         bodySnake.pop();
 
         moveDirect(direction, xy);
-        sounds.soundEffect('eat');
+        sounds.soundEffect('move');
         errors = true;
 
         bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
@@ -160,7 +162,7 @@
                 setTimeout(food, 200);
                 mice = 3;
             }
-            counter.innerHTML = Number(counter.innerHTML) + 10;
+            counter.innerHTML = parseInt(counter.innerHTML) + 10;
         }
     }
 

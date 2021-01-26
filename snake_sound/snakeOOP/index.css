@@ -1,0 +1,8 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    font-family: sans-serif;
+    flex-direction: column;
+}
