@@ -6,3 +6,14 @@ body {
     font-family: sans-serif;
     flex-direction: column;
 }
+
+#sounds {
+    height: 40px;
+    width: 40px;
+    padding: 0 5px;
+    /*background: white;*/
+}
+
+#sounds.active {
+    background: greenyellow;
+}
