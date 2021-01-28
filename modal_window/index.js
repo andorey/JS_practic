@@ -1,7 +1,7 @@
 
 
 const modal = $.modal({
-    title: 'My JS ModalWindow',
+    title: 'My JS Modal',
     closable: true,
     content: `
         <mark>Modal is working</mark>

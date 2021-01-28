@@ -9,7 +9,7 @@ function _createModal(options) {
                 <span class="modal-title">${options.title || 'Title of Window'}</span>
                 ${options.closable ? `<span class="close" data-close="true">&times;</span>` : ''}
             </div>
-            <div class="modal-body">
+            <div class="modal-body" data-content>
                 ${options.content || ''}
             </div>
             <div class="modal-footer">
@@ -27,10 +27,13 @@ $.modal = function (options) {
     const darkTimeout = 200;
     const $modal = _createModal(options);
     let closing = false;
-    let distroyed = false;
+    let destroyed = false;
 
     const suitModals = {
         open() {
+            if(destroyed){
+                return console.log('Method is distroed')
+            }
             !closing && $modal.classList.add('open');
         },
         close() {
@@ -44,16 +47,22 @@ $.modal = function (options) {
         }
     }
 
-    $modal.addEventListener('click', (event) => {
+    const listener = (event) => {
         if (event.target.dataset.close){
             suitModals.close();
         }
-    })
+    }
+
+    $modal.addEventListener('click', listener)
 
     return Object.assign(suitModals, {
         destroy(){
-            $modal.parentNode.removeChild($modal);
-            distroyed = true;
+            $modal.remove();
+            $modal.removeEventListener('click', listener)
+            destroyed = true;
+        },
+        setContent(html){
+            $modal.querySelector('[data-content]').innerHTML = html;
         }
     })
 }
