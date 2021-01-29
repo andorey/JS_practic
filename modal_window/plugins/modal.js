@@ -2,6 +2,7 @@ function _createModal(options) {
     const DEFAULT_WIDTH = '500px'
     const modal = document.createElement('div');
     modal.classList.add('modal');
+
     modal.insertAdjacentHTML('afterbegin', `
     <div class="modal-overlay" data-close="true">
         <div class="modal-window" style="width: ${options.width ||  DEFAULT_WIDTH}">

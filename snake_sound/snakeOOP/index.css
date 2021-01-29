@@ -11,9 +11,41 @@ body {
     height: 40px;
     width: 40px;
     padding: 0 5px;
-    /*background: white;*/
 }
 
 #sounds.active {
     background: greenyellow;
+}
+
+#fieldGame {
+    display: inline-block;
+    border: #00238b double 7px;
+}
+
+#fieldGame div {
+    display: flex;
+}
+
+#fieldGame div span {
+    width: 20px;
+    height: 20px;
+    border: 0.1pt solid #eff;
+}
+
+#up-bar {
+    display: flex;
+    font-size: 1.3em;
+    justify-content: space-around;
+    align-items: end;
+    margin: 5px;
+}
+
+#up-bar span span {
+    font-size: 1.4em;
+    color: #008b5d;
+}
+
+#up-bar button {
+    font-size: 1.1em;
+    border-radius: 7px;
 }
