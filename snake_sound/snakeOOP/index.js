@@ -1,13 +1,13 @@
 (function () {
 
     class Display {
-        constructor(volume) {
+        constructor() {
             this.game = document.querySelector('#game');
             this.columnNum = Math.floor(window.innerWidth / 34);
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from( {length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0) );
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = volume
+            this.volume = 0.02
         }
 
         creator(){
@@ -32,8 +32,6 @@
                     sounds.classList.add('active');
                     this.volume = 0.02;
                 }
-
-                console.log(this.volume);
             })
 
             const fieldGame = document.createElement('div');
@@ -46,7 +44,6 @@
         }
 
         soundEffect(action) {
-            console.log(this.volume)
             const osc = this.audioCtx.createOscillator();
             const gainV = this.audioCtx.createGain();
 
@@ -90,13 +87,12 @@
         }
     }
 
-    let game = new Display(0.02);
+    let game = new Display();
     game.creator()
     game.draw()
 
     document.querySelectorAll('#fieldGame').forEach(function (el) {
         el.addEventListener('click', (e) => {
-            console.log(e.target.dataset.xy, game.volume)
             game.soundEffect()
         })
     })
