@@ -7,7 +7,27 @@
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from( {length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0) );
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = 0.02
+            this.volume = 0.02;
+            this.direction = 'right';
+            this.errors = false;
+
+            window.addEventListener('keydown', (event)=> {
+                if (this.errors === true) {
+                    if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
+                        this.direction = 'left';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
+                        this.direction = 'right';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
+                        this.direction = 'up';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
+                        this.direction = 'down';
+                        this.errors = false;
+                    }
+                }
+            })
         }
 
         creator(){

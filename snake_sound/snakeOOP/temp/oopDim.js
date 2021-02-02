@@ -2,8 +2,8 @@ let driver = new Driver;
 
 class Snake{
     constructor() {
-        this.x = ...
-        this.y = ...
+        this.x = '...'
+        this.y = '...'
     }
 
     eat(food) {
@@ -42,7 +42,7 @@ class GameField{
     }
 
     handleButton() {
-        let btn = ...
+        let btn = '...'
         btn.addEventListener('click', () => {
             this.start();
         })
@@ -75,7 +75,7 @@ class GameField{
     createFood() {
         // generate rand coords
 
-        return new Food(our rand coords)
+        return new Food('our rand coords')
     }
 
     _generateRandomCoords() {
