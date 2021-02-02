@@ -8,26 +8,6 @@
             this.lineCheck = Array.from( {length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0) );
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             this.volume = 0.02;
-            this.direction = 'right';
-            this.errors = false;
-
-            window.addEventListener('keydown', (event)=> {
-                if (this.errors === true) {
-                    if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
-                        this.direction = 'left';
-                        this.errors = false;
-                    } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
-                        this.direction = 'right';
-                        this.errors = false;
-                    } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
-                        this.direction = 'up';
-                        this.errors = false;
-                    } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
-                        this.direction = 'down';
-                        this.errors = false;
-                    }
-                }
-            })
         }
 
         creator(){
@@ -105,11 +85,112 @@
                 this.game.querySelector('#fieldGame').appendChild(div);
             })
         }
+
+        coordinates( str ) {
+            let x = Math.round(Math.random() * (this.columnNum - 4) + 2);
+            let y = Math.round(Math.random() * (this.rowsNum - 2) + 1);
+
+            if ( str === 'snake' ) {
+                return new Snake(x, y);
+            }else{
+                return general.querySelector(`[data-xy='${x},${y}']`);
+            }
+        }
     }
+
+    class Snake {
+        constructor(x, y) {
+            this.columnNum = Math.floor(window.innerWidth / 34);
+            this.rowsNum = Math.floor(window.innerHeight / 26);
+            this.x = x;
+            this.y = y;
+            this.bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${this.x - i},${this.y}']`));
+            this.direction = 'right';
+            this.errors = false;
+
+            window.addEventListener('keydown', (event)=> {
+                if (this.errors === true) {
+                    if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
+                        this.direction = 'left';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
+                        this.direction = 'right';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
+                        this.direction = 'up';
+                        this.errors = false;
+                    } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
+                        this.direction = 'down';
+                        this.errors = false;
+                    }
+                }
+            })
+        }
+
+        move() {
+            let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
+            this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
+            this.bodySnake.pop();
+
+            this.moveDirect(this.direction, xy);
+            //sounds.soundEffect('move');
+            this.errors = true;
+
+            this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
+            //restartGame();
+
+            if (this.bodySnake[0].classList.contains('food')) {
+                this.bodySnake[0].classList.remove('food');
+                this.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
+                //sounds.soundEffect();
+                //mice -= 1;
+
+                // if ( mice < 1 ) {
+                //     setTimeout(food, 200);
+                //     mice = 3;
+                // }
+                //counter.innerHTML = parseInt(counter.innerHTML) + 10;
+            }
+            console.log(this.bodySnake)
+        }
+
+        moveDirect(direction, xy) {
+            if ( direction === 'right' ) {
+                if ( xy[0] + 1 === this.columnNum ) {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
+                } else {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
+                }
+            } else if ( direction === 'left' ) {
+                if ( xy[0] - 1 < 0 ) {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${this.columnNum - 1},${xy[1]}']`));
+                } else {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
+                }
+            } else if ( direction === 'up' ) {
+                if ( xy[1] - 1 < 0 ) {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${this.rowsNum - 1}']`));
+                } else {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
+                }
+            } else if ( direction === 'down' ) {
+                if ( xy[1] + 1 === this.rowsNum ) {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`));
+                } else {
+                    this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
+                }
+            }
+        }
+
+    }
+
 
     let game = new Display();
     game.creator()
     game.draw()
+    let {x, y} = game.coordinates('snake')
+    new Snake(x, y).move()
+
 
     document.querySelectorAll('#fieldGame').forEach(function (el) {
         el.addEventListener('click', (e) => {
@@ -118,14 +199,9 @@
     })
 
 
-    class Logic {
-        constructor() {
 
-        }
 
-    }
-
-    class Managment {
+    class Food {
         constructor() {
 
         }

@@ -19,7 +19,7 @@ body {
 
 #fieldGame {
     display: inline-block;
-    border: #068834 double 7px;
+    border: #880654 double 7px;
 }
 
 #fieldGame div {
@@ -48,4 +48,12 @@ body {
 #up-bar button {
     font-size: 1.1em;
     border-radius: 7px;
+}
+
+.snakeHead {
+    background-color: red;
+}
+
+.snakeBody {
+    background-color: green;
 }
