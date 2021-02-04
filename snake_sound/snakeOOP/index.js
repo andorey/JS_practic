@@ -85,6 +85,19 @@
                 this.game.querySelector('#fieldGame').appendChild(div);
             })
         }
+
+        restartGame(){
+            let div = document.createElement('div');
+            div.classList.add('field');
+            div.innerHTML = '<div>GAME OVER!</div>';
+            this.game.appendChild(div);
+
+            let button = document.createElement('button');
+            button.innerHTML = 'RESTART';
+            button.classList.add('button');
+            div.appendChild(button);
+            button.addEventListener('click', () => location.reload());
+        }
     }
 
 
@@ -143,6 +156,12 @@
 
                 let count = document.querySelector('.counter>span')
                     count.innerHTML = parseInt( count.innerHTML ) + 10;
+            }
+
+            if ( this.bodySnake[0].classList.contains('snakeBody') ) {
+                driver.soundEffect('die');
+                clearInterval(interval);
+                new Driver().restartGame()
             }
         }
 
@@ -214,7 +233,7 @@
     driver.draw();
 
     let snake = new Snake()
-    setInterval( () => snake.move(), 200 )
+    let interval = setInterval( () => snake.move(), 200 )
 
     new Food().createFood()
 

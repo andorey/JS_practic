@@ -61,3 +61,33 @@ body {
 .food {
     background-color: indigo;
 }
+
+.field {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: orangered;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-shadow: #026269 -2px -3px 5px;
+    font-size: 4.1em;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.19)
+}
+
+
+.button {
+    margin-top: 10%;
+    font-size: 18px;
+    background: #007288;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 9px;
+    box-shadow: white 0 0 10px,
+    white 1px 1px 19px;
+}

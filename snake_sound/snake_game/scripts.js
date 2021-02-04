@@ -56,10 +56,6 @@
                 game.appendChild(div);
             })
         }
-
-        _coordinates() {
-
-        }
     }
 
     class Sound {
