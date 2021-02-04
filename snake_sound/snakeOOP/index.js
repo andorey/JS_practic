@@ -93,94 +93,24 @@ driver.creator();
 driver.draw();
 
 
-
-
 class Snake {
-    constructor(x, y) {
+    constructor() {
         this.columnNum = new Driver().columnNum;
         this.rowsNum = new Driver().rowsNum;
-        this.x = x;
-        this.y = y;
+        [this.x, this.y] = this.coordinates('snake');
         this.bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${this.x - i},${this.y}']`));
-
-
-        console.log('this.bodySnake FIRST', this.bodySnake)
-
-        // window.addEventListener('keydown', (event)=> {
-        //     //if (this.errors === true) {
-        //         if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
-        //             this.direction = 'left';
-        //             this.errors = false;
-        //         } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
-        //             this.direction = 'right';
-        //             this.errors = false;
-        //         } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
-        //             this.direction = 'up';
-        //             this.errors = false;
-        //         } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
-        //             this.direction = 'down';
-        //             this.errors = false;
-        //         }
-        //     //}
-        // })
-    }
-
-    moveDirect( xy ) {
-        if ( this.direction === 'right' ) {
-            if ( xy[0] + 1 === this.columnNum ) {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
-            } else {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
-            }
-        } else if ( this.direction === 'left' ) {
-            if ( xy[0] - 1 < 0 ) {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${this.columnNum - 1},${xy[1]}']`));
-            } else {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
-            }
-        } else if ( this.direction === 'up' ) {
-            if ( xy[1] - 1 < 0 ) {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${this.rowsNum - 1}']`));
-            } else {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
-            }
-        } else if ( this.direction === 'down' ) {
-            if ( xy[1] + 1 === this.rowsNum ) {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`));
-            } else {
-                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
-            }
-        }
     }
 
     move() {
         console.log('this.bodySnake move', this.bodySnake);
         let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
         this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
-        console.log('this.bodySnake', this.bodySnake)
         this.bodySnake.pop();
 
-        this.moveDirect(xy);
-        //sounds.soundEffect('move');
-        //this.errors = true;
+        console.log('xy', xy)
+        this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
 
-        setTimeout(()=> {
-            this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
-        }, 1000)
-        //restartGame();
-
-        // if (this.bodySnake[0].classList.contains('food')) {
-        //     this.bodySnake[0].classList.remove('food');
-        //     this.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
-        //     sounds.soundEffect();
-        //     mice -= 1;
-        //
-        //     if ( mice < 1 ) {
-        //         setTimeout(food, 200);
-        //         mice = 3;
-        //     }
-        //     counter.innerHTML = parseInt(counter.innerHTML) + 10;
-        // }
+        this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
     }
 
     coordinates( str ) {
@@ -188,7 +118,7 @@ class Snake {
         let y = Math.round(Math.random() * (this.rowsNum - 2) + 1);
 
         if ( str === 'snake' ) {
-            return [this.x, this.y];
+            return [x, y];
         }else{
             return document.querySelector(`[data-xy='${x},${y}']`);
         }
@@ -196,6 +126,8 @@ class Snake {
 
 }
 
+let snakke = new Snake()
+setInterval( () => snakke.move(), 200)
 
 
 
