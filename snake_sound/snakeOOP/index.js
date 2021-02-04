@@ -87,24 +87,17 @@
         }
     }
 
+
+
     class Snake {
         constructor() {
             this.columnNum = new Driver().columnNum;
             this.rowsNum = new Driver().rowsNum;
             this.direction = 'right';
             this.errors = false;
+            this.mice = 3;
             [this.x, this.y] = this.coordinates('snake');
             this.bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${this.x - i},${this.y}']`));
-        }
-
-        move() {
-            let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
-            this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
-            this.bodySnake.pop();
-
-            this.moveDirect( xy );
-            this.errors = true;
-            console.log(this.direction)
 
             window.addEventListener('keydown', (event)=> {
                 if ( this.errors === true ) {
@@ -123,8 +116,34 @@
                     }
                 }
             })
+        }
+
+        move() {
+            let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
+            this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
+            this.bodySnake.pop();
+
+            this.moveDirect( xy );
+            this.errors = true;
+
+            driver.soundEffect('move');
 
             this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
+
+            if ( this.bodySnake[0].classList.contains('food') ) {
+                this.bodySnake[0].classList.remove('food');
+                this.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
+                driver.soundEffect();
+                this.mice -= 1;
+
+                if ( this.mice < 1 ) {
+                    setTimeout( ()=> new Food().createFood() , 200 );
+                    this.mice = 3;
+                }
+
+                let count = document.querySelector('.counter>span')
+                    count.innerHTML = parseInt( count.innerHTML ) + 10;
+            }
         }
 
         moveDirect( xy ) {
@@ -169,19 +188,35 @@
     }
 
 
+    class Food {
+        constructor() {
+            this.mouse = [0, 0, 0].map( el => el = new Snake().coordinates() );
+        }
+
+        createFood(){
+            while ( this.mouse.some(el => el.classList.contains('snakeHead') ||
+                el.classList.contains('snakeBody')) ||
+                [...new Set(this.mouse)].length !== 3
+                ) {
+
+                this.mouse = [0, 0, 0].map( el => el = new Snake().coordinates() );
+            }
+            this.mouse.map( el => el.classList.add('food') );
+        }
+
+    }
+
+
+
+
     const driver = new Driver()
     driver.creator();
     driver.draw();
 
-    let snakke = new Snake()
-    setInterval( () => snakke.move(), 200)
+    let snake = new Snake()
+    setInterval( () => snake.move(), 200 )
 
+    new Food().createFood()
 
-    class Food {
-        constructor() {
-
-        }
-
-    }
 
 })()

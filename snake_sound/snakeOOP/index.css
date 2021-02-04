@@ -57,3 +57,7 @@ body {
 .snakeBody {
     background-color: green;
 }
+
+.food {
+    background-color: indigo;
+}
