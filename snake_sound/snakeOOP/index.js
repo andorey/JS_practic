@@ -6,8 +6,7 @@
             this.columnNum = Math.floor(window.innerWidth / 34);
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from({length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0));
-            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = 0.02;
+            this.volume = 0.02
         }
 
         creator() {
@@ -41,37 +40,6 @@
             upBar.appendChild(counter);
             upBar.appendChild(sounds);
             this.game.appendChild(fieldGame);
-        }
-
-        soundEffect(action) {
-            const osc = this.audioCtx.createOscillator();
-            const gainV = this.audioCtx.createGain();
-
-            osc.connect(gainV);
-            gainV.connect(this.audioCtx.destination);
-
-            if (action === 'move') {
-                gainV.gain.value = this.volume;
-                osc.frequency.value = 410;
-                osc.type = 'sawtooth';
-
-                osc.start();
-                setTimeout(() => osc.stop(), 5);
-            } else if (action === 'die') {
-                gainV.gain.value = this.volume * 2;
-                osc.frequency.value = 59;
-                osc.type = 'sawtooth';
-
-                osc.start();
-                setTimeout(() => osc.stop(), 550)
-            } else {
-                gainV.gain.value = this.volume;
-                osc.frequency.value = 210;
-                osc.type = 'sawtooth';
-
-                osc.start();
-                setTimeout(() => osc.stop(), 100);
-            }
         }
 
         draw() {
@@ -139,14 +107,14 @@
             this.moveDirect( xy );
             this.errors = true;
 
-            driver.soundEffect('move');
+            new Sound().soundEffect('move');
 
             this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
 
             if ( this.bodySnake[0].classList.contains('food') ) {
                 this.bodySnake[0].classList.remove('food');
                 this.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
-                driver.soundEffect();
+                new Sound().soundEffect();
                 this.mice -= 1;
 
                 if ( this.mice < 1 ) {
@@ -155,11 +123,11 @@
                 }
 
                 let count = document.querySelector('.counter>span')
-                    count.innerHTML = parseInt( count.innerHTML ) + 10;
+                count.innerHTML = parseInt( count.innerHTML ) + 10;
             }
 
             if ( this.bodySnake[0].classList.contains('snakeBody') ) {
-                driver.soundEffect('die');
+                new Sound().soundEffect('die');
                 clearInterval(interval);
                 new Driver().restartGame()
             }
@@ -223,6 +191,44 @@
             this.mouse.map( el => el.classList.add('food') );
         }
 
+    }
+
+    class Sound {
+        constructor() {
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.volume = driver.volume;
+        }
+
+        soundEffect(action) {
+            const osc = this.audioCtx.createOscillator();
+            const gainV = this.audioCtx.createGain();
+
+            osc.connect(gainV);
+            gainV.connect(this.audioCtx.destination);
+
+            if (action === 'move') {
+                gainV.gain.value = this.volume;
+                osc.frequency.value = 410;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 5);
+            } else if (action === 'die') {
+                gainV.gain.value = this.volume * 2;
+                osc.frequency.value = 59;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 550)
+            } else {
+                gainV.gain.value = this.volume;
+                osc.frequency.value = 210;
+                osc.type = 'sawtooth';
+
+                osc.start();
+                setTimeout(() => osc.stop(), 100);
+            }
+        }
     }
 
 
