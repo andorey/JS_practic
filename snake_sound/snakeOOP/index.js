@@ -1,6 +1,6 @@
 (function () {
 
-    class Driver {
+    class Game {
         constructor() {
             this.game = document.querySelector('#game');
             this.columnNum = Math.floor(window.innerWidth / 34);
@@ -22,8 +22,8 @@
             sounds.classList.add('active');
             sounds.classList.add('active');
             sounds.innerHTML = `&#9835`;
-            sounds.addEventListener('click', (e) => {
-                // e.target
+
+            sounds.addEventListener('click', () => {
                 if (sounds.classList.contains('active')) {
                     sounds.classList.remove('active');
                     this.volume = 0;
@@ -69,11 +69,10 @@
     }
 
 
-
     class Snake {
         constructor() {
-            this.columnNum = new Driver().columnNum;
-            this.rowsNum = new Driver().rowsNum;
+            this.columnNum = new Game().columnNum;
+            this.rowsNum = new Game().rowsNum;
             this.direction = 'right';
             this.errors = false;
             this.mice = 3;
@@ -129,7 +128,7 @@
             if ( this.bodySnake[0].classList.contains('snakeBody') ) {
                 new Sound().soundEffect('die');
                 clearInterval(interval);
-                new Driver().restartGame()
+                new Game().restartGame()
             }
         }
 
@@ -177,7 +176,7 @@
 
     class Food {
         constructor() {
-            this.mouse = [0, 0, 0].map( el => el = new Snake().coordinates() );
+            this.mouse = [0, 0, 0].map( () => new Snake().coordinates() );
         }
 
         createFood(){
@@ -186,17 +185,18 @@
                 [...new Set(this.mouse)].length !== 3
                 ) {
 
-                this.mouse = [0, 0, 0].map( el => el = new Snake().coordinates() );
+                this.mouse = [0, 0, 0].map( () =>  new Snake().coordinates() );
             }
             this.mouse.map( el => el.classList.add('food') );
         }
 
     }
 
+
     class Sound {
         constructor() {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = driver.volume;
+            this.volume = game.volume;
         }
 
         soundEffect(action) {
@@ -212,21 +212,21 @@
                 osc.type = 'sawtooth';
 
                 osc.start();
-                setTimeout(() => osc.stop(), 5);
+                setTimeout( () => osc.stop(), 5 );
             } else if (action === 'die') {
                 gainV.gain.value = this.volume * 2;
                 osc.frequency.value = 59;
                 osc.type = 'sawtooth';
 
                 osc.start();
-                setTimeout(() => osc.stop(), 550)
+                setTimeout( () => osc.stop(), 550 )
             } else {
                 gainV.gain.value = this.volume;
                 osc.frequency.value = 210;
                 osc.type = 'sawtooth';
 
                 osc.start();
-                setTimeout(() => osc.stop(), 100);
+                setTimeout( () => osc.stop(), 100 );
             }
         }
     }
@@ -234,9 +234,9 @@
 
 
 
-    const driver = new Driver()
-    driver.creator();
-    driver.draw();
+    const game = new Game()
+    game.creator();
+    game.draw();
 
     let snake = new Snake()
     let interval = setInterval( () => snake.move(), 200 )
