@@ -6,7 +6,7 @@
             this.columnNum = Math.floor(window.innerWidth / 34);
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from({length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0));
-            this.volume = 0.02
+            this.volume = 0.02;
         }
 
         creator() {
@@ -196,7 +196,7 @@
     class Sound {
         constructor() {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = game.volume;
+            this.volume = gameStart.volume;
         }
 
         soundEffect(action) {
@@ -233,15 +233,13 @@
 
 
 
-
-    const game = new Game()
-    game.creator();
-    game.draw();
-
-    let snake = new Snake()
-    let interval = setInterval( () => snake.move(), 200 )
+    const gameStart = new Game()
+    gameStart.creator();
+    gameStart.draw();
 
     new Food().createFood()
 
+    let snake = new Snake()
+    let interval = setInterval( () => snake.move(), 200 )
 
 })()
