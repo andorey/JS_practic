@@ -7,6 +7,7 @@
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from({length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0));
             this.volume = 0.02;
+            this.interval = 0;
         }
 
         creator() {
@@ -66,6 +67,11 @@
             div.appendChild(button);
             button.addEventListener('click', () => location.reload());
         }
+
+        intervals(){
+            const snake = new Snake();
+            this.interval = setInterval(() => snake.move(), 200)
+        }
     }
 
 
@@ -99,6 +105,7 @@
         }
 
         move() {
+            let sound = new Sound();
             let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
             this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
             this.bodySnake.pop();
@@ -106,14 +113,14 @@
             this.moveDirect( xy );
             this.errors = true;
 
-            new Sound().soundEffect('move');
+            sound.soundEffect('move');
 
             this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
 
             if ( this.bodySnake[0].classList.contains('food') ) {
                 this.bodySnake[0].classList.remove('food');
                 this.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
-                new Sound().soundEffect();
+                sound.soundEffect();
                 this.mice -= 1;
 
                 if ( this.mice < 1 ) {
@@ -126,8 +133,8 @@
             }
 
             if ( this.bodySnake[0].classList.contains('snakeBody') ) {
-                new Sound().soundEffect('die');
-                clearInterval(interval);
+                sound.soundEffect('die');
+                clearInterval(gameStart.interval);
                 new Game().restartGame()
             }
         }
@@ -236,10 +243,8 @@
     const gameStart = new Game()
     gameStart.creator();
     gameStart.draw();
+    gameStart.intervals();
 
     new Food().createFood()
-
-    let snake = new Snake()
-    let interval = setInterval( () => snake.move(), 200 )
 
 })()
