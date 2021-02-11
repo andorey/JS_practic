@@ -7,7 +7,8 @@
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from({length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0));
             this.volume = 0.02;
-            this.interval = 0;
+            let snake = new Snake(this.columnNum, this.rowsNum);
+            this.interval = setInterval(() => snake.move(), 200)
         }
 
         creator() {
@@ -68,17 +69,13 @@
             button.addEventListener('click', () => location.reload());
         }
 
-        intervals(){
-            const snake = new Snake();
-            this.interval = setInterval(() => snake.move(), 200)
-        }
     }
 
 
     class Snake {
-        constructor() {
-            this.columnNum = new Game().columnNum;
-            this.rowsNum = new Game().rowsNum;
+        constructor(columnNum, rowsNum) {
+            this.columnNum = columnNum;
+            this.rowsNum = rowsNum;
             this.direction = 'right';
             this.errors = false;
             this.mice = 3;
@@ -134,7 +131,7 @@
 
             if ( this.bodySnake[0].classList.contains('snakeBody') ) {
                 sound.soundEffect('die');
-                clearInterval(gameStart.interval);
+                clearInterval(game.interval);
                 new Game().restartGame()
             }
         }
@@ -203,7 +200,7 @@
     class Sound {
         constructor() {
             this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            this.volume = gameStart.volume;
+            this.volume = game.volume;
         }
 
         soundEffect(action) {
@@ -239,11 +236,9 @@
     }
 
 
-
-    const gameStart = new Game()
-    gameStart.creator();
-    gameStart.draw();
-    gameStart.intervals();
+    const game = new Game();
+    game.creator();
+    game.draw();
 
     new Food().createFood()
 
