@@ -7,8 +7,6 @@
             this.rowsNum = Math.floor(window.innerHeight / 26);
             this.lineCheck = Array.from({length: this.rowsNum}, () => Array.from({length: this.columnNum}, () => 0));
             this.volume = 0.02;
-            let snake = new Snake(this.columnNum, this.rowsNum);
-            this.interval = setInterval(() => snake.move(), 200)
         }
 
         creator() {
@@ -54,6 +52,8 @@
                 });
                 this.game.querySelector('#fieldGame').appendChild(div);
             })
+
+            new Food(this.columnNum, this.rowsNum).createFood()
         }
 
         restartGame(){
@@ -69,6 +69,11 @@
             button.addEventListener('click', () => location.reload());
         }
 
+        move(){
+            let snake = new Snake(this.columnNum, this.rowsNum);
+            this.interval = setInterval(() => snake.move(), 200)
+        }
+
     }
 
 
@@ -79,7 +84,8 @@
             this.direction = 'right';
             this.errors = false;
             this.mice = 3;
-            [this.x, this.y] = this.coordinates('snake');
+            this.food = new Food(this.columnNum, this.rowsNum);
+            [this.x, this.y] = this.food.coordinates('snake');
             this.bodySnake = [0, 0, 0].map((el, i) => document.querySelector(`[data-xy='${this.x - i},${this.y}']`));
 
             window.addEventListener('keydown', (event)=> {
@@ -121,7 +127,7 @@
                 this.mice -= 1;
 
                 if ( this.mice < 1 ) {
-                    setTimeout( ()=> new Food().createFood() , 200 );
+                    setTimeout( ()=> this.food.createFood() , 200 );
                     this.mice = 3;
                 }
 
@@ -163,6 +169,14 @@
                 }
             }
         }
+    }
+
+
+    class Food {
+        constructor(columnNum, rowsNum) {
+            this.columnNum = columnNum;
+            this.rowsNum = rowsNum;
+        }
 
         coordinates( str ) {
             let x = Math.round(Math.random() * (this.columnNum - 4) + 2);
@@ -175,23 +189,17 @@
             }
         }
 
-    }
-
-
-    class Food {
-        constructor() {
-            this.mouse = [0, 0, 0].map( () => new Snake().coordinates() );
-        }
-
         createFood(){
-            while ( this.mouse.some(el => el.classList.contains('snakeHead') ||
+            let mouse = [0, 0, 0].map( () => this.coordinates() );
+
+            while ( mouse.some(el => el.classList.contains('snakeHead') ||
                 el.classList.contains('snakeBody')) ||
-                [...new Set(this.mouse)].length !== 3
+                [...new Set(mouse)].length !== 3
                 ) {
 
-                this.mouse = [0, 0, 0].map( () =>  new Snake().coordinates() );
+                mouse = [0, 0, 0].map( () =>  this.coordinates() );
             }
-            this.mouse.map( el => el.classList.add('food') );
+            mouse.map( el => el.classList.add('food') );
         }
 
     }
@@ -239,7 +247,6 @@
     const game = new Game();
     game.creator();
     game.draw();
+    game.move()
 
-    new Food().createFood()
-
-})()
+})() 
