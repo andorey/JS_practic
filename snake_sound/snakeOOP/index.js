@@ -42,7 +42,7 @@
             this.game.appendChild(fieldGame);
         }
 
-        draw() {
+        drawField() {
             this.lineCheck.forEach((el, i) => {
                 let div = document.createElement('div');
                 el.map((el, k) => {
@@ -69,7 +69,7 @@
             button.addEventListener('click', () => location.reload());
         }
 
-        move(){
+        moveSnake(){
             let snake = new Snake(this.columnNum, this.rowsNum);
             this.interval = setInterval(() => snake.move(), 200)
         }
@@ -246,7 +246,7 @@
 
     const game = new Game();
     game.creator();
-    game.draw();
-    game.move()
+    game.drawField();
+    game.moveSnake();
 
 })() 
