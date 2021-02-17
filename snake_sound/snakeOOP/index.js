@@ -10,8 +10,8 @@
         }
 
         creator() {
-            const upBar = document.createElement('div');
-            upBar.id = 'up-bar';
+            const topBar = document.createElement('div');
+            topBar.id = 'top-bar';
 
             const counter = document.createElement('span');
             counter.classList.add('counter');
@@ -36,9 +36,9 @@
             const fieldGame = document.createElement('div');
             fieldGame.id = 'fieldGame';
 
-            this.game.appendChild(upBar);
-            upBar.appendChild(counter);
-            upBar.appendChild(sounds);
+            this.game.appendChild(topBar);
+            topBar.appendChild(counter);
+            topBar.appendChild(sounds);
             this.game.appendChild(fieldGame);
         }
 

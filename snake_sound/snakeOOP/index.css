@@ -32,7 +32,7 @@ body {
     border: 0.1pt solid #eff;
 }
 
-#up-bar {
+#top-bar {
     display: flex;
     font-size: 1.3em;
     justify-content: space-around;
@@ -40,12 +40,12 @@ body {
     margin: 5px;
 }
 
-#up-bar span span {
+#top-bar span span {
     font-size: 1.4em;
     color: #008b5d;
 }
 
-#up-bar button {
+#top-bar button {
     font-size: 1.1em;
     border-radius: 7px;
 }
