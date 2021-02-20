@@ -20,7 +20,6 @@
             const sounds = document.createElement('button');
             sounds.id = 'sounds';
             sounds.classList.add('active');
-            sounds.classList.add('active');
             sounds.innerHTML = `&#9835`;
 
             sounds.addEventListener('click', () => {

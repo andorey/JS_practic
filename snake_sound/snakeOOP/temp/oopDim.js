@@ -1,3 +1,59 @@
+
+class Field {
+    constructor(selector) {
+        this.selector = document.getElementById(selector);
+        this._rowsNum = Math.floor(window.innerHeight / 27);
+        this._columnsNum = Math.floor(window.innerWidth / 34);
+        this._field = Array.from({length: this._rowsNum}, () => Array.from({length: this._columnsNum}, () => 0));
+        this.topBar();
+        this.draw();
+    }
+
+    topBar(){
+        const soundBar = document.createElement('div');
+        soundBar.id = 'top-bar';
+
+        const counter = document.createElement('span');
+        counter.classList.add('counter');
+        counter.innerHTML = '<u>Total score:</u>&nbsp;&nbsp;<span>0</span>';
+
+        const sounds = document.createElement('button');
+        sounds.id = 'sounds';
+        sounds.classList.add('active');
+        sounds.innerHTML = `&#9835`;
+
+        soundBar.appendChild(counter);
+        soundBar.appendChild(sounds);
+        this.selector.appendChild(soundBar);
+    }
+
+    draw() {
+        const field = document.createElement('div');
+        field.id ='field';
+
+        this._field.forEach((el, i) => {
+            let div = document.createElement('div');
+
+            el.forEach((e, k) => {
+                let span = document.createElement('span');
+
+                span.dataset.xy = `${k},${i}`;
+                div.appendChild(span);
+            })
+            field.appendChild(div);
+        })
+        this.selector.appendChild(field);
+    }
+
+}
+
+
+new Field('game')
+
+
+
+
+
 // (function () {
 //
 //     class Game {

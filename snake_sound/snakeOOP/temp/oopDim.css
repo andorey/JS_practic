@@ -1,0 +1,106 @@
+#game {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    font-family: sans-serif;
+    flex-direction: column;
+}
+
+#sounds {
+    height: 40px;
+    width: 40px;
+    padding: 0 5px;
+}
+
+#sounds.active {
+    background: greenyellow;
+}
+
+#field {
+    display: inline-block;
+    border: #880654 double 7px;
+    margin: 0 auto;
+}
+
+#field div {
+    display: flex;
+}
+
+#field div span {
+    width: 20px;
+    height: 20px;
+    border: 0.1pt solid #eff;
+}
+
+#top-bar {
+    display: flex;
+    font-size: 1.3em;
+    justify-content: space-around;
+    align-items: end;
+    margin: 5px;
+}
+
+#top-bar span span {
+    font-size: 1.4em;
+    color: #008b5d;
+}
+
+#top-bar button {
+    font-size: 1.1em;
+    border-radius: 7px;
+}
+
+/*.snakeHead {*/
+/*    background-color: red;*/
+/*}*/
+
+/*.snakeBody {*/
+/*    background-color: green;*/
+/*}*/
+
+/*.food {*/
+/*    background-color: indigo;*/
+/*}*/
+
+/*.field {*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    color: orangered;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-content: center;*/
+/*    align-items: center;*/
+/*    text-shadow: #026269 -2px -3px 5px,*/
+/*    white -1px -1px 23px, white -1px -1px 13px;*/
+/*    font-size: 4.7em;*/
+/*    font-weight: bold;*/
+/*    background-color: rgba(0, 0, 0, 0.19)*/
+/*}*/
+
+
+/*.button {*/
+/*    margin-top: 10%;*/
+/*    font-size: 18px;*/
+/*    background: #007288;*/
+/*    color: white;*/
+/*    padding: 10px 20px;*/
+/*    border-radius: 9px;*/
+/*    box-shadow: #007288 1px 1px 5px,*/
+/*    black 2px 2px 1px;*/
+/*    transition: background-color, 1.55s;*/
+/*}*/
+
+/*.button:hover {*/
+/*    background-color: chartreuse;*/
+/*    color: #000000;*/
+/*    text-shadow: #000000 -1px -1px 1px,*/
+/*    #ffffff 2px 2px 4px;*/
+/*    box-shadow: white 0 0 7px,*/
+/*    greenyellow 1px 1px 14px;*/
+/*    transition: background-color, 0.35s;*/
+/*}*/
