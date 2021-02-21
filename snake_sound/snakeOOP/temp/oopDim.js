@@ -48,7 +48,7 @@ class Build {
 }
 
 
-class Field {
+class Game {
     constructor() {
         this._game = new Build('game').selector;
         this.spans = this._game.querySelectorAll('span');
@@ -66,7 +66,6 @@ class Sounds {
         this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         this.volume = 0.02;
         this.soundButton();
-
     }
 
     soundButton(){
@@ -90,7 +89,7 @@ class Sounds {
 
         if (action === 'move') {
             gainV.gain.value = this.volume;
-            osc.frequency.value = 410;
+            osc.frequency.value = 455;
             osc.type = 'sawtooth';
 
             osc.start();
@@ -114,8 +113,41 @@ class Sounds {
 
 }
 
-new Field();
-new Sounds();
+
+class Adjust {
+    constructor() {
+        this.direction = 'right';
+        this.moveDirect();
+    }
+
+    moveDirect(){
+        window.addEventListener('keydown', event => {
+            //if ( errors === true ) {
+                if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
+                    this.direction = 'left';
+                    //this.errors = false;
+                } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
+                    this.direction = 'right';
+                    //this.errors = false;
+                } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
+                    this.direction = 'up';
+                    //this.errors = false;
+                } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
+                    this.direction = 'down';
+                    //this.errors = false;
+                }
+            //}
+            console.log(this.direction)
+        })
+    }
+}
+
+
+
+new Game()
+let adjust = new Adjust();
+let sounds = new Sounds()
+
 
 
 
