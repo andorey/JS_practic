@@ -50,9 +50,12 @@ class Build {
 
 class Game {
     constructor() {
-        this._game = new Build('game').selector;
-        this.spans = this._game.querySelectorAll('span');
-
+        this._game = new Build('game');
+        this.fieldSpans = this._game.selector.querySelectorAll('span');
+        this.rowsNum = this._game._rowsNum;
+        this.columnNum = this._game._columnsNum;
+        this.food = new Food(this.columnNum, this.rowsNum);
+        this.sounds = new Sounds();
 
     }
 
@@ -143,10 +146,33 @@ class Adjust {
 }
 
 
+class Food {
+    constructor(columnNum, rowsNum) {
+        this.columnNum = columnNum;
+        this.rowsNum = rowsNum;
+        this.createFood();
+    }
+
+    get(){
+        let x = Math.round(Math.random() * (this.columnNum - 3) + 2);
+        let y = Math.round(Math.random() * (this.rowsNum - 2) + 1);
+        return `[data-xy='${x},${y}']`;
+    }
+
+    createFood(){
+        let mouse = [0, 0, 0].map( () => this.get() );
+
+        while ( [...new Set(mouse)].length !== 3 ) {
+            mouse = [0, 0, 0].map( () => this.get() );
+        }
+        mouse.map( el=> document.querySelector(`${el}`).classList.add('food') );
+    }
+}
+
 
 new Game()
 let adjust = new Adjust();
-let sounds = new Sounds()
+
 
 
 

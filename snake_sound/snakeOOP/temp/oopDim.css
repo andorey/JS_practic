@@ -51,17 +51,17 @@
     border-radius: 7px;
 }
 
-/*.snakeHead {*/
-/*    background-color: red;*/
-/*}*/
+.snakeHead {
+    background-color: red;
+}
 
-/*.snakeBody {*/
-/*    background-color: green;*/
-/*}*/
+.snakeBody {
+    background-color: green;
+}
 
-/*.food {*/
-/*    background-color: indigo;*/
-/*}*/
+.food {
+    background-color: indigo;
+}
 
 /*.field {*/
 /*    position: absolute;*/
