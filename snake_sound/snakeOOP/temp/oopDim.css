@@ -53,10 +53,12 @@
 
 .snakeHead {
     background-color: red;
+    border-radius: 10px 1px;
 }
 
 .snakeBody {
     background-color: green;
+    border-radius: 7px;
 }
 
 .food {

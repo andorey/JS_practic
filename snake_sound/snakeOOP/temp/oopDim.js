@@ -53,12 +53,71 @@ class Game {
         this._game = new Build('game');
         this.fieldSpans = this._game.selector.querySelectorAll('span');
         this.rowsNum = this._game._rowsNum;
-        this.columnNum = this._game._columnsNum;
-        this.food = new Food(this.columnNum, this.rowsNum);
+        this.columnsNum = this._game._columnsNum;
         this.sounds = new Sounds();
+
+        this.snake = new Snake(this.rowsNum, this.columnsNum, this.sounds);
+        this.food = new Food(this.rowsNum, this.columnsNum);
+
+
+        this.interval = setInterval(() => this.snake.move(), 200)
+    }
+
+
+}
+
+
+class Snake {
+    constructor(rowsNum, columnsNum, sounds) {
+        this.rows = rowsNum;
+        this.columns = columnsNum;
+        this.sounds = sounds;
+        this.X = Math.round( Math.random() * (this.columns - 4) + 3 );
+        this.Y = Math.round( Math.random() * (this.rows - 2) + 1 );
+        this.bodySnake = [0, 0, 0].map((_, i) => document.querySelector(`[data-xy='${this.X},${this.Y}']`) );
+        this.adjust = new Adjust();
 
     }
 
+    moveDirect( xy ) {
+        if ( this.adjust.direction === 'right' ) {
+            if ( xy[0] + 1 === this.columns ) {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='0,${xy[1]}']`));
+            } else {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] + 1},${xy[1]}']`));
+            }
+        } else if ( this.adjust.direction === 'left' ) {
+            if ( xy[0] - 1 < 0 ) {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${this.columns - 1},${xy[1]}']`));
+            } else {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0] - 1},${xy[1]}']`));
+            }
+        } else if ( this.adjust.direction === 'up' ) {
+            if ( xy[1] - 1 < 0 ) {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${this.rows - 1}']`));
+            } else {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] - 1}']`));
+            }
+        } else if ( this.adjust.direction === 'down' ) {
+            if ( xy[1] + 1 === this.rows ) {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},0']`));
+            } else {
+                this.bodySnake.unshift(document.querySelector(`[data-xy='${xy[0]},${xy[1] + 1}']`));
+            }
+        }
+    }
+
+    move() {
+        let xy = this.bodySnake[0].dataset.xy.split(',').map(Number);
+        this.bodySnake.forEach((el) => el.classList.remove('snakeHead', 'snakeBody'));
+        this.bodySnake.pop();
+
+        this.moveDirect(xy);
+        this.sounds.soundEffect('move');
+
+        this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
+
+    }
 
 }
 
@@ -147,7 +206,7 @@ class Adjust {
 
 
 class Food {
-    constructor(columnNum, rowsNum) {
+    constructor(rowsNum, columnNum) {
         this.columnNum = columnNum;
         this.rowsNum = rowsNum;
         this.createFood();
@@ -162,7 +221,10 @@ class Food {
     createFood(){
         let mouse = [0, 0, 0].map( () => this.get() );
 
-        while ( [...new Set(mouse)].length !== 3 ) {
+        while ( mouse.some( el => document.querySelector(`${el}`).classList.contains('snakeHead') ) ||
+                mouse.some( el => document.querySelector(`${el}`).classList.contains('snakeBody') ) ||
+                [...new Set(mouse)].length !== 3
+            ) {
             mouse = [0, 0, 0].map( () => this.get() );
         }
         mouse.map( el=> document.querySelector(`${el}`).classList.add('food') );
@@ -171,7 +233,6 @@ class Food {
 
 
 new Game()
-let adjust = new Adjust();
 
 
 
