@@ -114,6 +114,7 @@ class Snake {
 
         this.moveDirect(xy);
         this.sounds.soundEffect('move');
+        this.adjust.errors = true;
 
         this.bodySnake.map((e, i) => i === 0 ? e.classList.add('snakeHead') : e.classList.add('snakeBody'));
 
@@ -180,25 +181,26 @@ class Adjust {
     constructor() {
         this.direction = 'right';
         this.moveDirect();
+        this.errors = false;
     }
 
     moveDirect(){
         window.addEventListener('keydown', event => {
-            //if ( errors === true ) {
+            if ( this.errors === true ) {
                 if ( event.key === 'ArrowLeft' && this.direction !== 'right' ) {
                     this.direction = 'left';
-                    //this.errors = false;
+                    this.errors = false;
                 } else if ( event.key === 'ArrowRight' && this.direction !== 'left' ) {
                     this.direction = 'right';
-                    //this.errors = false;
+                    this.errors = false;
                 } else if ( event.key === 'ArrowUp' && this.direction !== 'down' ) {
                     this.direction = 'up';
-                    //this.errors = false;
+                    this.errors = false;
                 } else if ( event.key === 'ArrowDown' && this.direction !== 'up' ) {
                     this.direction = 'down';
-                    //this.errors = false;
+                    this.errors = false;
                 }
-            //}
+            }
             console.log(this.direction)
         })
     }
