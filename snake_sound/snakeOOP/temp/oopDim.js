@@ -72,7 +72,6 @@
                 this.snake.bodySnake.push(document.querySelector(`[data-xy='${xy[0]},${xy[1]}']`));
                 this.sounds.soundEffect();
                 this.amountFood -= 1;
-                console.log(this.amountFood)
 
                 if (this.amountFood < 1) {
                     setTimeout(() => new Food(this.rowsNum, this.columnsNum), 200);

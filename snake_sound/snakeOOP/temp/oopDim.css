@@ -103,6 +103,6 @@
     text-shadow: #000000 -0px -0px 3px,
     #000000 -0px -0px 5px, #000000 -0px -0px 7px;
     box-shadow: white 0 0 7px,
-    greenyellow 1px 1px 14px;
+    greenyellow 1px 1px 24px;
     transition: background-color, 0.35s;
 }
