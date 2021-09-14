@@ -1,11 +1,9 @@
 const body = document.body;
 const span = body.querySelector('.out');
 const btn = body.querySelector('button');
-const setHex = [0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F'];
-// const colors = "AliceBlue,AntiqueWhite,Aqua,Aquamarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,Blue,BlueViolet,Brown,Brown,Burlywood,CadetBlue,Chartreuse,Chocolate,Coral,CornflowerBlue,Cornsilk,Crimson,Cyan,Cyan,DarkBlue,DarkCyan,DarkGoldenrod,DarkGray,DarkGreen,DarkKhaki,DarkMagenta,DarkOliveGreen,DarkOrange,DarkOrchid,DarkRed,DarkSalmon,DarkSeaGreen,DarkSlateBlue,DarkSlateGray,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DodgerBlue,Firebrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,GhostWhite,Gold,Goldenrod,Gray,Gray,Green,GreenYellow,Honeydew,HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,LightCoral,LightCyan,LightGoldenrodYellow,LightGray,LightGreen,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateGray,LightSteelBlue,LightYellow,Lime,LimeGreen,Linen,Magenta,Maroon,MediumAquamarine,MediumBlue,MediumOrchid,MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,MistyRose,Moccasin,NavajoWhite,Navy,OldLace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenrod,PaleGreen,PaleTurquoise,PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,Plum,PowderBlue,Purple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,SeaGreen,Seashell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,Snow,SpringGreen,SteelBlue,Tan,Teal,Thistle,Tomato,Turquoise,Violet,Wheat,White,WhiteSmoke,Yellow,YellowGreen";
-// const setColor = colors.split(',')
 
-const dic = {
+const setHex = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+const set = {
     aliceblue: "#f0f8ff",
     antiquewhite: "#faebd7",
     aqua: "#00ffff",
@@ -43,7 +41,6 @@ const dic = {
     darkseagreen: "#8fbc8f",
     darkslateblue: "#483d8b",
     darkslategray: "#2f4f4f",
-    darkslategrey: "#2f4f4f",
     darkturquoise: "#00ced1",
     darkviolet: "#9400d3",
     deeppink: "#ff1493",
@@ -85,7 +82,6 @@ const dic = {
     lightseagreen: "#20b2aa",
     lightskyblue: "#87cefa",
     lightslategray: "#778899",
-    lightslategrey: "#778899",
     lightsteelblue: "#b0c4de",
     lightyellow: "#ffffe0",
     lime: "#00ff00",
@@ -138,7 +134,6 @@ const dic = {
     skyblue: "#87ceeb",
     slateblue: "#6a5acd",
     slategray: "#708090",
-    slategrey: "#708090",
     snow: "#fffafa",
     springgreen: "#00ff7f",
     steelblue: "#4682b4",
@@ -155,26 +150,53 @@ const dic = {
     yellowgreen: "#9acd32"
 }
 
-const arrDicKeys = Object.keys(dic)
-const generateColorSimple = () => arrDicKeys[ Math.floor(Math.random() * arrDicKeys.length) ];
+const arrSetKeys = Object.keys(set)
+
+const generateColorSimple = () => arrSetKeys[ Math.floor(Math.random() * arrSetKeys.length) ];
 const generateColorHex = () => setHex[ Math.floor(Math.random() * setHex.length) ];
 
-let color = '';
-
 const painting = () => {
-    const color = localStorage['color'] || 'white'
-    body.style.backgroundColor = color;
-    span.style.color = color;
-    span.innerHTML = color;
+    let spanTextColor, bodyColor, spanColor;
+    const color = JSON.parse( localStorage['color'] ) || ['white','#ffffff']
+
+    if(span.id === 'index'){
+        spanTextColor = !color[0] ? color[1] : color[0];
+        bodyColor = color[0] || color[1];
+        spanColor = color[0];
+    }else{
+        spanTextColor = color[0] ? color[1] + `<br /><small>( ${color[0]} )</small>` : color[1];
+        bodyColor = color[1];
+        spanColor = color[1];
+    }
+
+    span.innerHTML = spanTextColor;
+    body.style.backgroundColor = bodyColor;
+    span.style.color = spanColor;
+    btn.style.setProperty('--bg-color', color)      // painting background button
+}
+
+const colorHex = ( numHex ) => {
+    let out;
+    for ( let i in set ){
+        if( set[i].slice(0,6) === numHex.slice(0,6) ){
+            out = [i, set[i]]
+        }
+    }
+    return out ? out : [null, numHex]
 }
 
 btn.addEventListener('click', (el) => {
+    let outLocal, color;
+
     if(el.target.className === 'hex'){
         color = '#' + Array(6).fill().map(generateColorHex).join('');
+        outLocal = colorHex(color)
     }else{
         color = generateColorSimple();
+        outLocal = [color, set[color]]
     }
-    localStorage['color'] = color;
+
+    localStorage['color'] = JSON.stringify(outLocal);
     painting()
 })
 

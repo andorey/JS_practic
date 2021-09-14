@@ -1,3 +1,7 @@
+:root {
+    --bg-color: black;
+}
+
 *{
     text-align: center;
     font-family: sans-serif;
@@ -29,14 +33,14 @@
 }
 button{
     margin: 10px;
+    padding: .2rem .4rem;
     border-radius: .2rem;
     background: white;
     box-shadow: 0 0 3px 2px gray;
 }
-
 button:hover{
     color: white;
-    background-color: black;
+    background-color: var(--bg-color);
     transition: all .5s;
     box-shadow: 0 0 5px 2px green;
 }
