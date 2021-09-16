@@ -160,9 +160,9 @@ const painting = () => {
     const color = JSON.parse( localStorage['color'] ) || ['white','#ffffff']
 
     if(span.id === 'index'){
-        spanTextColor = !color[0] ? color[1] : color[0];
+        spanTextColor = !color[0] ? color[1] : color[0] + `<br /><small>( ${set[ color[0] ]} )</small>`;
         bodyColor = color[0] || color[1];
-        spanColor = color[0];
+        spanColor = color[1];
     }else{
         spanTextColor = color[0] ? color[1] + `<br /><small>( ${color[0]} )</small>` : color[1];
         bodyColor = color[1];
@@ -175,15 +175,20 @@ const painting = () => {
     btn.style.setProperty('--bg-color', color)      // painting background button
 }
 
-const colorHex = ( numHex ) => {
+const colorHex = ( numHex ) => {                    // find matches function
     let out;
+    const hexParse = color => color.replace(/(\w){2}/g, x => x[0])
+
     for ( let i in set ){
         if( set[i].slice(0,6) === numHex.slice(0,6) ){
-            out = [i, set[i]]
+            out = [i, numHex]
+        }else if( hexParse(set[i]) === hexParse(numHex) ){
+            out = [i, numHex]
         }
     }
     return out ? out : [null, numHex]
 }
+
 
 btn.addEventListener('click', (el) => {
     let outLocal, color;
