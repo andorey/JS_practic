@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Holy Grail</title>
+	<style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        header {
+            color: white;
+            background-color: steelblue;
+            text-align: center;
+            padding: 5vh;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            color: white;
+            background-color: #6d9e1d;
+            text-align: center;
+            padding: 5vh;
+        }
+
+        .wrapper {
+            display: grid;
+            justify-content: space-between;
+            height: 85vh;
+        }
+
+        .content {
+            padding: 2%;
+            grid-row-start: 1;
+            grid-column-start: 2;
+        }
+
+        .content h2 {
+            margin: 2% 0;
+        }
+
+        .navigation {
+            width: 150px;
+            background-color: orange;
+            grid-row-start: 1;
+            grid-column-start: 1;
+            padding: 20px 0 0 20px;
+        }
+
+        .relatedLinks {
+            width: 150px;
+            background-color: #9a3c6b;
+            grid-row-start: 1;
+            grid-column-start: 3;
+            padding: 20px 0 0 20px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .wrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .navigation {
+                position: absolute;
+                top: 12vh;
+                padding: 20px;
+                left: 0;
+                right: 0;
+                width: auto;
+            }
+
+            .relatedLinks {
+                position: absolute;
+                bottom: 12vh;
+                padding: 20px;
+                right: 0;
+                left: 0;
+                width: auto;
+            }
+
+            .content {
+                padding-top: 60px;
+            }
+        }
+	</style>
+</head>
+<body>
+<div id="app">
+	<header>Header</header>
+	<div class="wrapper">
+		<div class="navigation">Navigation</div>
+		<div class="content">
+			<h2>Main</h2>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium adipisci alias aliquam architecto
+			asperiores assumenda autem consectetur corporis dolorem, esse fugit harum incidunt ipsam iusto minima nam
+			nemo, non optio perspiciatis quaerat quasi repudiandae voluptatem? A ab aliquam asperiores blanditiis
+			commodi corporis culpa cumque delectus dolore dolores ducimus ea eaque earum eius esse est ex
+			exercitationem, fugit id illo ipsum labore laudantium magni maiores minus nam neque pariatur perferendis
+			provident quaerat sint sunt ullam velit. Blanditiis consequatur deserunt eius, laboriosam mollitia
+			reiciendis rerum sit. Assumenda aut delectus deleniti facere hic laboriosam magnam magni maxime neque,
+			perspiciatis placeat quos, similique, sint!
+		</div>
+		<div class="relatedLinks">Related links</div>
+	</div>
+	<footer>Footer</footer>
+</div>
+</body>
+</html>

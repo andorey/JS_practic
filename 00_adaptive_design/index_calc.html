@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+        * {
+            margin: 0;
+        }
+
+        .app {
+            height: 100%;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 80vh;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            background-color: royalblue;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            height: 10vh;
+
+        }
+
+        p {
+            width: 130px
+        }
+
+        .aside {
+            background-color: orange;
+            padding: 10px;
+        }
+
+        .main {
+            padding: 15px;
+
+        }
+
+        .article {
+            background-color: violet;
+            padding: 10px
+        }
+
+        footer {
+            background-color: yellowgreen;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            height: 10vh;
+        }
+
+        @media (max-width: 600px) {
+            .wrapper {
+                flex-direction: column;
+            }
+
+            .aside {
+                height: 5vh;
+            }
+
+            .main {
+                height: 70vh;
+            }
+
+            .article {
+                height: 5vh;
+            }
+        }
+	</style>
+</head>
+<body>
+<div class="app">
+	<header>HEDER</header>
+	<div class="wrapper">
+		<div class="aside"><p>Navigation</p></div>
+		<div class="main">
+			<h2>MAIN</h2>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate ea eius eveniet exercitationem facilis
+			iste itaque molestiae nesciunt odit omnis porro possimus quasi, quidem rem similique! Accusamus, ad adipisci
+			asperiores assumenda cum enim explicabo facilis fuga impedit ipsam ipsum, iste nemo provident qui quia
+			quisquam ratione rem soluta vero, voluptas?
+		</div>
+		<div class="article"><p>Related links</p></div>
+	</div>
+	<footer>FOOTER</footer>
+</div>
+</body>
+</html>
